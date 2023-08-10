@@ -82,6 +82,7 @@ const Navbar = () => {
             />
             {toggleDropdown && (
               <div className="dropdown">
+                <p>Bonjour {session?.user.name}</p>
                 <Link
                   href="/profile"
                   className="dropdown_link"

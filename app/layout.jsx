@@ -2,11 +2,15 @@ import "@styles/globals.css";
 import Navbar from "@components/Navbar";
 import Provider from "@components/Provider";
 
+
+
 export const metadata = {
   title: "Prompt saver",
   description: "Share, save & discover AI prompts",
 };
 const RootLayout = ({children}) => {
+ 
+
   return (
     <html lang="en">
       <body>
