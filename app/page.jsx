@@ -1,7 +1,9 @@
 import Feed from "@components/Feed";
 import User from "@models/user";
+import Setup from "@components/Setup";
 
 const Home = () => {
+
   return (
     <section className="w-full flex-center flex-col">
       <h1 className="head_text text-center">
@@ -15,6 +17,7 @@ const Home = () => {
       <p className="desc text-center">Eventmaker Copilot est une application web destinée aux organisateurs d'évènements. 
       <br/>
       <span className="text-xs">work in progress</span></p>
+      <Setup/>
       <Feed/>
     </section>  
   );

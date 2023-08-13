@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 import { useSession } from "next-auth/react";
+import { useUser } from "@utils/UserContext";
+
 
 
 const PromptCardList = ({ data, handleTagClick }) => {
@@ -20,6 +22,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 };
 
 const Feed = () => {
+  const { token } = useUser();
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -65,7 +68,7 @@ const Feed = () => {
     setSearchedResults(searchResult);
   };
   return (
-    session?.user && (
+    session?.user && token && (
       <section className="feed">
            <h2 className="font-bold text-xl ">
       
