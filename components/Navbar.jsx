@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Navbar = () => {
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
@@ -17,30 +17,28 @@ const Navbar = () => {
     };
     setUpProviders();
   }, []);
+
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href="/" className="flex gap-2 flex-center">
         <Image
-          src="/assets/images/logo.svg"
-          alt="Prompt saver logo"
-          width={30}
-          height={30}
+          src="/assets/images/logo.png"
+          alt="Eventmaker Copilot Logo"
+          width={50}
+          height={50}
           className="object-contain"
         />
-        <p className="logo_text">Promptopia</p>
+        <p className="logo_text">Eventmaker Copilot</p>
       </Link>
 
       {/* Desktop navigation */}
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
-            <Link href="/create-prompt" className="black_btn">
-              Create post
-            </Link>
             <button type="button" onClick={signOut} className="outline_btn">
-              Sign out
+              Se déconnecter
             </button>
-            <Link href="/profile">
+            <Link href="/">
               <Image
                 src={session?.user.image}
                 width={37}
@@ -60,7 +58,7 @@ const Navbar = () => {
                   onClick={() => signIn(provider.id)}
                   className="black_btn"
                 >
-                  Sign in
+                  Se connecter
                 </button>
               ))}
           </>
@@ -84,18 +82,11 @@ const Navbar = () => {
               <div className="dropdown">
                 <p>Bonjour {session?.user.name}</p>
                 <Link
-                  href="/profile"
+                  href="/"
                   className="dropdown_link"
                   onClick={() => setToggleDropdown(false)}
                 >
-                  My profile
-                </Link>
-                <Link
-                  href="/create-prompt"
-                  className="dropdown_link"
-                  onClick={() => setToggleDropdown(false)}
-                >
-                  Add new prompt
+                  Mon profil
                 </Link>
                 <button
                   type="button"
@@ -104,7 +95,9 @@ const Navbar = () => {
                     setToggleDropdown(false);
                     signOut();
                   }}
-                >Sign out</button>
+                >
+                  Se déconnecter
+                </button>
               </div>
             )}
           </div>
@@ -118,7 +111,7 @@ const Navbar = () => {
                   onClick={() => signIn(provider.id)}
                   className="black_btn"
                 >
-                  Sign in
+                  Se connecter
                 </button>
               ))}
           </>

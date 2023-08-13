@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { useSession } from "next-auth/react";
+
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -18,6 +20,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 };
 
 const Feed = () => {
+  const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
@@ -62,26 +65,29 @@ const Feed = () => {
     setSearchedResults(searchResult);
   };
   return (
-    <section className="feed">
-      <form className="relative w-full flex-center">
-        <input
-          type="text"
-          placeholder="Search for prompts or tag"
-          value={searchText}
-          onChange={handleSearchChange}
-          required
-          className="search_input peer"
-        />
-      </form>
-      {searchText ? (
-        <PromptCardList
-          data={searchedResults}
-          handleTagClick={handleTagClick}
-        />
-      ) : (
-        <PromptCardList data={posts} handleTagClick={handleTagClick} />
-      )}
-    </section>
+    session?.user && (
+      <section className="feed">
+           <h2 className="font-bold text-xl ">
+      
+         <span className="green_gradient text-center">Vos évènements</span>
+      </h2>
+        <form className="relative w-full flex-center">
+          <input
+            type="text"
+            placeholder="Rechercher un évènement"
+            value={searchText}
+            onChange={handleSearchChange}
+            required
+            className="search_input peer"
+          />
+        </form>
+        {searchText
+          ? true
+          : // seached events card list
+            // events cards list
+            true}
+      </section>
+    )
   );
 };
 
