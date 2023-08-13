@@ -78,7 +78,7 @@ const Feed = () => {
             value={searchText}
             onChange={handleSearchChange}
             required
-            className="search_input peer"
+            className="search_input peer mb-10"
           />
         </form>
         {searchText
