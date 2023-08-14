@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const value = {
     user: session?.user.name,
+    id: session?.user.id,
     token: null, // Vous pouvez définir le token ici si nécessaire
     setUser,
     setToken,

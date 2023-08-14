@@ -1,5 +1,6 @@
 import { connectToBD } from "@utils/database";
 import Prompt from "@models/prompt";
+import User from "@models/user";
 
 export const GET = async (req, { params }) => {
   try {
@@ -16,20 +17,21 @@ export const GET = async (req, { params }) => {
   }
 };
 
-export const PATCH = async (req, { params }) => {
-  const { prompt, tag } = await req.json();
+export const PUT = async (req, { params }) => {
+  const { token } = await req.json();
   try {
     await connectToBD();
-    const existingPrompt = await Prompt.findById(params.id);
-    if (!existingPrompt)
-      return new Response("Prompt not found", { status: 404 });
-    existingPrompt.prompt = prompt;
-    existingPrompt.tag = tag;
+    const user = await User.findById(params.id);
+    console.log(user);
 
-    await existingPrompt.save();
-    return new Response(JSON.stringify(existingPrompt), { status: 200 });
+    if (!user) return new Response("User not found", { status: 404 });
+    user.token = token;
+
+    await user.save();
+    console.log(user);
+    return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {
-    return new Response("Failed to update prompt", { status: 500 });
+    return new Response("Failed to update token", { status: 500 });
   }
 };
 
@@ -38,7 +40,6 @@ export const DELETE = async (req, { params }) => {
     await connectToBD();
     await Prompt.findByIdAndDelete(params.id);
     return new Response("Prompt deleted successfully", { status: 200 });
-
   } catch (error) {
     return new Response("Error deleting prompt", { status: 500 });
   }
