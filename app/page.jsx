@@ -18,7 +18,7 @@ const Home = () => {
       <br/>
       <span className="text-xs mb-16">work in progress</span></p>
       <Setup/>
-      <Feed/>
+      
     </section>  
   );
 };

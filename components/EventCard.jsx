@@ -39,7 +39,14 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
               Nom : {event.title}
             </h3>
             <p className="font-inter text-sm text-gray-500">
-              Adresse : {event.address}
+            organizer : {event.organizer}<br/>
+            start_date : {event.start_date}<br/>
+            end_date : {event.end_date}<br/>
+            timezone : {event.timezone}<br/>
+            website_domain_name : {event.website_domain_name}<br/>
+            guest_count : {event.guest_count}<br/>
+            primary_color : {event.primary_color}<br/>
+            secondary_color : {event.secondary_color}<br/>
             </p>
           </div>
         </div>
@@ -56,7 +63,7 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
           />
         </div>
       </div>
-      <p className="my-4 font-satoshi text-sm text-gray-700">{event.description}</p>
+      {/* <p className="my-4 font-satoshi text-sm text-gray-700">{event.description}</p> */}
       {/* <p
         className="font-inter text-sm blue_gradient cursor-pointer"
         // onClick={() => handleTagClick && handleTagClick(post.tag)}
