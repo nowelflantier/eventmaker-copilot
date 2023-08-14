@@ -22,6 +22,7 @@ const fetchUserData = async (userId) => {
 export const UserProvider = ({ children }) => {
   const { data: session } = useSession();
   const [user, setUser] = useState(null);
+  const [events, setEvents] = useState([]);
   const [token, setToken] = useState(null);
   const [first_name, setFirst_name] = useState(null)
   const [last_name, setLast_name] = useState(null)
@@ -43,6 +44,8 @@ export const UserProvider = ({ children }) => {
     setToken,
     setLast_name,
     setFirst_name,
+    events,
+    setEvents,
     first_name,
     token,
     last_name,

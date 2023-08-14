@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
-
-
+import { fetchDataFromServer } from "./FetchEvents";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -22,13 +21,19 @@ const PromptCardList = ({ data, handleTagClick }) => {
 };
 
 const Feed = () => {
-  const { token } = useUser();
+  const { token, user, events, setEvents } = useUser();
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
+  const [areEventsLoaded, setAreEventsLoaded] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
-
   const [posts, setPosts] = useState([]);
+
+  const handleLoadEventsClick = async () => {
+    const fetchedEvents = await fetchDataFromServer( user.token );
+    setEvents(fetchedEvents)
+    setAreEventsLoaded(true)
+  };
 
   const fetchPosts = async () => {
     const response = await fetch("/api/prompt");
@@ -49,7 +54,7 @@ const Feed = () => {
     );
   };
   const handleSearchChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     clearTimeout(searchTimeout);
     setSearchText(e.target.value);
 
@@ -61,19 +66,21 @@ const Feed = () => {
       }, 500)
     );
   };
-  const handleTagClick = (tagName) => {
-    setSearchText(tagName);
+  // const handleTagClick = (tagName) => {
+  //   setSearchText(tagName);
 
-    const searchResult = filterPrompts(tagName);
-    setSearchedResults(searchResult);
-  };
+  //   const searchResult = filterPrompts(tagName);
+  //   setSearchedResults(searchResult);
+  // };
+
   return (
-    session?.user && token && (
-      <section className="feed">
-           <h2 className="font-bold text-xl ">
-      
-         <span className="green_gradient text-center">Vos évènements</span>
-      </h2>
+    session?.user &&
+    user?.token && (
+      <section className="mb-10 feed">
+        <h2 className="font-bold text-xl ">
+          <span className="green_gradient text-center">Vos évènements</span>
+        </h2>
+
         <form className="relative w-full flex-center">
           <input
             type="text"
@@ -89,6 +96,18 @@ const Feed = () => {
           : // seached events card list
             // events cards list
             true}
+        {areEventsLoaded ? (
+          events.map((event) => <div key={event._id}>
+            <PromptCard event={event}/>
+            </div>)
+        ) : (
+          <button
+            onClick={handleLoadEventsClick}
+            className="black_btn mt-5 mx-auto"
+          >
+            Charger mes évènements
+          </button>
+        )}
       </section>
     )
   );
