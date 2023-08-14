@@ -16,7 +16,7 @@ const Home = () => {
       {/* <h2 className="head_text text-center">{User?.username}</h2> */}
       <p className="desc text-center">Eventmaker Copilot est une application web destinée aux organisateurs d'évènements. 
       <br/>
-      <span className="text-xs">work in progress</span></p>
+      <span className="text-xs mb-16">work in progress</span></p>
       <Setup/>
       <Feed/>
     </section>  

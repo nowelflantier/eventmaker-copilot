@@ -6,6 +6,16 @@ import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchDataFromServer } from "./FetchEvents";
 
+const EventCardList = ({ events, areEventsLoaded, fetchEvents }) => {
+  return areEventsLoaded ? (
+    <div className="prompt_layout">
+    {events.map((event) => <EventCard event={event} key={event._id} />)}</div>
+  ) : (
+    <button onClick={fetchEvents} className="black_btn mt-5 mx-auto">
+      Charger mes évènements
+    </button>
+  );
+};
 const Feed = () => {
   const { token, user, events, setEvents } = useUser();
   const { data: session } = useSession();
@@ -13,27 +23,21 @@ const Feed = () => {
   const [areEventsLoaded, setAreEventsLoaded] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
-  const [posts, setPosts] = useState([]);
 
-  const handleLoadEventsClick = async () => {
-    const fetchedEvents = await fetchDataFromServer( user.token );
-    setEvents(fetchedEvents)
-    setAreEventsLoaded(true)
-  };
+
   const fetchEvents = async () => {
-    const fetchedEvents = await fetchDataFromServer( user.token );
-    setEvents(fetchedEvents)
-    setAreEventsLoaded(true)
+    const fetchedEvents = await fetchDataFromServer(user.token);
+    setEvents(fetchedEvents);
+    setAreEventsLoaded(true);
   };
 
-  
   useEffect(() => {
-    // fetchPosts();
-    // handleLoadEventsClick();
-    {user && fetchEvents();}
+    {
+      user && fetchEvents();
+    }
   }, [user]);
 
-  const filterPrompts = (searchtext) => {
+  const filterEvents = (searchtext) => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
     return events.filter(
       (item) =>
@@ -50,7 +54,7 @@ const Feed = () => {
     // debounce method
     setSearchTimeout(
       setTimeout(() => {
-        const searchResult = filterPrompts(e.target.value);
+        const searchResult = filterEvents(e.target.value);
         setSearchedResults(searchResult);
       }, 500)
     );
@@ -65,7 +69,7 @@ const Feed = () => {
   return (
     session?.user &&
     user?.token && (
-      <section className="mb-10 feed">
+      <section className="feed">
         <h2 className="font-bold text-xl ">
           <span className="green_gradient text-center">Vos évènements</span>
         </h2>
@@ -81,22 +85,9 @@ const Feed = () => {
           />
         </form>
         {searchText
-          ? true
-          : // seached events card list
-            // events cards list
-            true}
-        {areEventsLoaded ? (
-          events.map((event) => <div key={event._id}>
-            <EventCard event={event}/>
-            </div>)
-        ) : (
-          <button
-            onClick={handleLoadEventsClick}
-            className="black_btn mt-5 mx-auto"
-          >
-            Charger mes évènements
-          </button>
-        )}
+          ? <EventCardList events={searchedResults} fetchEvents={fetchEvents} areEventsLoaded={areEventsLoaded} />
+          : <EventCardList events={events} fetchEvents={fetchEvents} areEventsLoaded={areEventsLoaded} />}
+            
       </section>
     )
   );

@@ -12,10 +12,7 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
   const router = useRouter();
 
   const handleProfileClick = () => {
-    console.log(post);
-
     if (post.creator._id === session?.user.id) return router.push("/profile");
-
     router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
   };
   const handleCopy = () => {
@@ -39,10 +36,10 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
           />
           <div className="flex flex-col">
             <h3 className="font-satoshi font-semibold text-gray-900">
-              {event.title}
+              Nom : {event.title}
             </h3>
             <p className="font-inter text-sm text-gray-500">
-              {event.address}
+              Adresse : {event.address}
             </p>
           </div>
         </div>
