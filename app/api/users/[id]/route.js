@@ -5,7 +5,7 @@ import User from "@models/user";
 export const GET = async (req, { params }) => {
   try {
     await connectToBD();
-    const user = await User.findById(params.id)
+    const user = await User.findById(params.id);
     if (!user) return new Response("user not found", { status: 404 });
     return new Response(JSON.stringify(user), {
       status: 200,
@@ -17,30 +17,20 @@ export const GET = async (req, { params }) => {
   }
 };
 
-export const PUT = async (req, { params }) => {
+export const PATCH = async (req, { params }) => {
+  console.log("Request body:", req.body); // Imprimer la requête
   const { token } = await req.json();
+  console.log("Token:", token); // Imprimer le token
+
   try {
     await connectToBD();
     const user = await User.findById(params.id);
-    console.log(user);
-
     if (!user) return new Response("User not found", { status: 404 });
     user.token = token;
-
+    user.markModified('token');
     await user.save();
-    console.log(user);
     return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {
     return new Response("Failed to update token", { status: 500 });
-  }
-};
-
-export const DELETE = async (req, { params }) => {
-  try {
-    await connectToBD();
-    await Prompt.findByIdAndDelete(params.id);
-    return new Response("Prompt deleted successfully", { status: 200 });
-  } catch (error) {
-    return new Response("Error deleting prompt", { status: 500 });
   }
 };

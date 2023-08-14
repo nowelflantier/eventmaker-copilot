@@ -26,9 +26,14 @@ const router= useRouter();
       e.preventDefault();
       setSubmitting(true);
       console.log(userData);
+      // try {
+      //   const response = await fetch(`/`)
+      // } catch (error) {
+        
+      // }
       try {
         const response = await fetch(`/api/users/${id}`, {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify({
             token: userData.token,       
           }),

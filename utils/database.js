@@ -7,6 +7,8 @@ export const connectToBD = async () => {
   if (isConnected) {
     console.log("MongoBD is already connected");
     return;
+  } else {
+    console.log("Connecting to MongoDB");
   }
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
