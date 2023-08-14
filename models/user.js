@@ -17,6 +17,12 @@ const UserSchema = new Schema({
   token: {
     type: String,
   },
+  first_name: {
+    type: String,
+  },
+  last_name: {
+    type: String,
+  },
   image: {
     type: String,
   },

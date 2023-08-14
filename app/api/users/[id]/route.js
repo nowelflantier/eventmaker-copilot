@@ -18,16 +18,18 @@ export const GET = async (req, { params }) => {
 };
 
 export const PATCH = async (req, { params }) => {
-  console.log("Request body:", req.body); // Imprimer la requête
-  const { token } = await req.json();
-  console.log("Token:", token); // Imprimer le token
-
+  const { token, first_name, last_name } = await req.json();
   try {
     await connectToBD();
     const user = await User.findById(params.id);
     if (!user) return new Response("User not found", { status: 404 });
     user.token = token;
-    user.markModified('token');
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.markModified("token");
+    user.markModified("first_name");
+    user.markModified("last_name");
+
     await user.save();
     return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {
