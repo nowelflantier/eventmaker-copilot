@@ -2,7 +2,7 @@ import Feed from "@components/Feed";
 import User from "@models/user";
 import Setup from "@components/Setup";
 
-const Home = () => {
+const Home = () => { 
 
   return (
     <section className="w-full flex-center flex-col">
