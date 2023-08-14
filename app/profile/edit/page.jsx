@@ -25,6 +25,7 @@ const router= useRouter();
     const updateToken = async (e) => {
       e.preventDefault();
       setSubmitting(true);
+      console.log(userData);
       try {
         const response = await fetch(`/api/users/${id}`, {
           method: "PUT",
@@ -61,6 +62,3 @@ const router= useRouter();
 }
 
 export default EditProfil
-
-
-

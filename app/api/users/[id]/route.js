@@ -5,13 +5,13 @@ import User from "@models/user";
 export const GET = async (req, { params }) => {
   try {
     await connectToBD();
-    const prompt = await Prompt.findById(params.id).populate("creator");
-    if (!prompt) return new Response("Prompt not found", { status: 404 });
-    return new Response(JSON.stringify(prompt), {
+    const user = await User.findById(params.id)
+    if (!user) return new Response("user not found", { status: 404 });
+    return new Response(JSON.stringify(user), {
       status: 200,
     });
   } catch (error) {
-    return new Response("Failed to fetch prompts from database", {
+    return new Response("Failed to fetch user from database", {
       status: 500,
     });
   }

@@ -14,7 +14,7 @@ const Setup = () => {
             <span className="green_gradient text-center font-semibold">Bonjour {user} !</span>
             <br/>
             Encore quelques étapes avant de pouvoir accéder à vos
-            évènements :
+            évènements : {token}
           </h3>
           <Link href="/profile/edit"className="black_btn mt-5 mx-auto">Associer un Token</Link>
         </div>
