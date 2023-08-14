@@ -24,27 +24,7 @@ const Setup = () => {
           </div>
         </div>
       )}
-      {user && user.token && (
-        <>
-          {/* <div className="prompt_card mt-10 mb-10">
-            <div className="mx-auto max-w-md text-center">
-              <h3 className="text-center">
-                <span className="green_gradient text-center font-semibold">
-                  Bonjour {user.first_name} !
-                </span>
-                <br />
-                Votre token Eventmaker est bien configuré.
-              </h3>
-              <Link href="/profile/edit" className="black_btn mt-5 mx-auto">
-                Modifier mes informations
-              </Link>
-              
-            </div>
-            
-          </div> */}
-          <Feed/>
-        </>
-      )}
+      {user && user.token && <Feed />}
     </div>
   );
 };
