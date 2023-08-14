@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
-const PromptCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
+const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
   const { data: session } = useSession();
   const pathName = usePathname();
@@ -30,13 +30,13 @@ const PromptCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
           className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
           // onClick={handleProfileClick}
         >
-          {/* <Image
+          <Image
             className="object-contain rounded-full"
             alt="user_image"
-            src={post.creator.image}
+            src={event.photo.url}
             width={40}
             height={40} 
-          /> */}
+          />
           <div className="flex flex-col">
             <h3 className="font-satoshi font-semibold text-gray-900">
               {event.title}
@@ -86,4 +86,4 @@ const PromptCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
   );
 };
 
-export default PromptCard;
+export default EventCard;

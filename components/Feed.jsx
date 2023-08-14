@@ -1,24 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import PromptCard from "./PromptCard";
+import EventCard from "./EventCard";
 import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchDataFromServer } from "./FetchEvents";
-
-const PromptCardList = ({ data, handleTagClick }) => {
-  return (
-    <div className="mt-16 prompt_layout">
-      {data.map((post) => (
-        <PromptCard
-          key={post._id}
-          post={post}
-          handleTagClick={handleTagClick}
-        />
-      ))}
-    </div>
-  );
-};
 
 const Feed = () => {
   const { token, user, events, setEvents } = useUser();
@@ -34,23 +20,26 @@ const Feed = () => {
     setEvents(fetchedEvents)
     setAreEventsLoaded(true)
   };
-
-  const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
-    const data = await response.json();
-    setPosts(data);
+  const fetchEvents = async () => {
+    const fetchedEvents = await fetchDataFromServer( user.token );
+    setEvents(fetchedEvents)
+    setAreEventsLoaded(true)
   };
+
+  
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    // fetchPosts();
+    // handleLoadEventsClick();
+    {user && fetchEvents();}
+  }, [user]);
 
   const filterPrompts = (searchtext) => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
-    return posts.filter(
+    return events.filter(
       (item) =>
-        regex.test(item.creator.username) ||
-        regex.test(item.tag) ||
-        regex.test(item.prompt)
+        regex.test(item.title) ||
+        regex.test(item.organizer) ||
+        regex.test(item.website_domain_name)
     );
   };
   const handleSearchChange = (e) => {
@@ -98,7 +87,7 @@ const Feed = () => {
             true}
         {areEventsLoaded ? (
           events.map((event) => <div key={event._id}>
-            <PromptCard event={event}/>
+            <EventCard event={event}/>
             </div>)
         ) : (
           <button
