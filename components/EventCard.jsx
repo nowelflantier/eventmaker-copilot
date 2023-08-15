@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { parseISO, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-
+ 
 
 const EventCard = ({ event, isFavorite, handleTagClick, handleAddFavorite,handleRemoveFavorite, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
@@ -18,24 +18,17 @@ const EventCard = ({ event, isFavorite, handleTagClick, handleAddFavorite,handle
   const end_date = event.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date ? format(start_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
   const formattedEndDate = end_date ? format(end_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
-  
-  console.log({start_date,end_date});
-// console.log({event, isFavorite});
-  const handleProfileClick = () => {
-    if (post.creator._id === session?.user.id) return router.push("/profile");
-    router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
+
+  const handleEventClick = () => {
+    router.push(`/event/${event._id}`);
   };
-  // const handleCopy = () => {
-  //   setCopied(post.prompt);
-  //   navigator.clipboard.writeText(post.prompt);
-  //   setTimeout(() => setCopied(""), 3000);
-  // };
+
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
         <div
           className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
-          // onClick={handleProfileClick}
+          onClick={handleEventClick}
         >
           {/* <Image
             className="object-contain"

@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
-import { fetchDataFromServer } from "./FetchEvents";
-import { useRouter } from "next/navigation";
-
+import { fetchEventsFromServer } from "./FetchEvents";
 
 
 const EventCardList = ({
@@ -45,7 +43,7 @@ const Feed = () => {
   const [searchedResults, setSearchedResults] = useState([]);
   
   const fetchEvents = async () => {
-    const fetchedEvents = await fetchDataFromServer(user.token);
+    const fetchedEvents = await fetchEventsFromServer(user.token);
     const fetchedUserResponse = await fetch(`/api/users/${user._id}`, {
       method: "GET",
       headers: {
@@ -53,14 +51,12 @@ const Feed = () => {
       },
     });
     const fetchedUser = await fetchedUserResponse.json();
-
     setFavoriteEvents(fetchedUser.favoriteEvents);
     setEvents(fetchedEvents);
     setAreEventsLoaded(true);
   };
   
   const updateUserFavorites = async (action, favoriteEvent) => {
-    console.log({ action, favoriteEvent });
     const response = await fetch(`/api/users/${user._id}`, {
       method: "PATCH",
       headers: {
@@ -89,9 +85,7 @@ const Feed = () => {
       start_date: event.start_date,
       end_date: event.end_date,
     };
-    console.log(favoriteEvent);
     const updatedUser = await updateUserFavorites("add", favoriteEvent);
-    console.log(updatedUser);
     setFavoriteEvents(updatedUser.favoriteEvents);
   };
 
