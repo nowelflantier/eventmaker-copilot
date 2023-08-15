@@ -159,6 +159,14 @@
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter  w-auto h-fit;
 }
 
+.prompt_cta_card {
+  @apply w-auto mx-auto rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+}
+
+/* .cta_text {
+  @apply hover:text-black
+} */
+
 .flex-center {
   @apply flex justify-center items-center;
 }

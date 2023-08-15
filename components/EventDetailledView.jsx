@@ -1,22 +1,31 @@
-import { parseISO, format } from 'date-fns';
-import { fr } from 'date-fns/locale';
- 
-const EventDetailledView = ({ event,isEventLoaded }) => {
+import { parseISO, format } from "date-fns";
+import { fr } from "date-fns/locale";
+import Link from "next/link";
+
+const EventDetailledView = ({ event, isEventLoaded }) => {
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
-  const formattedStartDate = start_date ? format(start_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
-  const formattedEndDate = end_date ? format(end_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
+  const formattedStartDate = start_date
+    ? format(start_date, "dd/MM/yyyy", { locale: fr })
+    : "N/A";
+  const formattedEndDate = end_date
+    ? format(end_date, "dd/MM/yyyy", { locale: fr })
+    : "N/A";
 
   const links = [
-    { name: "Accéder au back office", href: `https://app.eventmaker.io/?locale=fr&redirected_event_id=${event?._id}` },
-    { name: "Accéder au site de l'évènement", href: `https://${event?.website_domain_name}` },
-
+    {
+      name: "Accéder au back office",
+      href: `https://app.eventmaker.io/?locale=fr&redirected_event_id=${event?._id}`,
+    },
+    {
+      name: "Accéder au site de l'évènement",
+      href: `https://${event?.website_domain_name}`,
+    },
   ];
   const stats = [
     { name: "Date de début", value: formattedStartDate },
     { name: "Date de fin", value: formattedEndDate },
-  
-  ]; 
+  ];
 
   return (
     <div className="relative isolate w-11/12  glassmorphism overflow-hidden bg-gray-900 py-24 sm:py-32">
@@ -52,13 +61,18 @@ const EventDetailledView = ({ event,isEventLoaded }) => {
       <div className="mx-auto max-w-7xl px-3 lg:px-3">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            <span className="green_gradient">{event?.title} </span><br/>
-            <span className='black_gradient text-2xl'>{event?.organizer}</span>
+            <span className="green_gradient">{event?.title} </span>
+            <br />
+            <span className="black_gradient text-2xl">{event?.organizer}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-500">
             {event?.description}
           </p>
+       
         </div>
+        <Link className=" prompt_cta_card text-center" href={`/event/${event?._id}/edit`}>
+            <span className=" cta_text  ">Générer les contenus de mon évènement avec Eventmaker Copilot <span aria-hidden="true">&rarr;</span></span>
+          </Link>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
@@ -69,7 +83,10 @@ const EventDetailledView = ({ event,isEventLoaded }) => {
           </div>
           <dl className="mt-6 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.name} className="flex prompt_infocard flex-col-reverse">
+              <div
+                key={stat.name}
+                className="flex prompt_infocard flex-col-reverse"
+              >
                 <dt className="text-base leading-7 text-gray-500">
                   {stat.name}
                 </dt>
