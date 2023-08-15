@@ -10,7 +10,7 @@ const EventDetailledView = ({ event }) => {
     { name: "Full-time colleagues", value: "300+" },
     { name: "Hours per week", value: "40" },
     { name: "Paid time off", value: "Unlimited" },
-  ];
+  ]; 
 
   return (
     <div className="relative isolate w-screen overflow-hidden bg-gray-900 py-24 sm:py-32">
