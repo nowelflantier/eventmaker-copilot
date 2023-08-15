@@ -5,10 +5,12 @@ import { useUser } from "@utils/UserContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useEvent } from "@utils/EventContext";
 
 const EventPage = () => {
-  const { user } = useUser();
+  const { user, setCurrentEventId } = useUser();
   const { data: session } = useSession();
+  const {event, setEvent} = useEvent()
   const router = useRouter();
   const [isEventLoaded, setIsEventLoaded] = useState(false);
   const params = useParams();
@@ -30,12 +32,23 @@ const EventPage = () => {
     console.log(fetchedEventDetails);
     setEventsDetails(fetchedEventDetails);
     setIsEventLoaded(true);
+    const eventDetailsToStore = {
+      title: fetchedEventDetails.title,
+      _id: fetchedEventDetails._id,
+      start_date: fetchedEventDetails.start_date,
+      end_date: fetchedEventDetails.end_date,
+      website_domain_name: fetchedEventDetails.website_domain_name,
+      // Ajoutez ici d'autres propriétés si nécessaire
+    };
+    setEvent(eventDetailsToStore)
   };
 
   useEffect(() => {
     {
-      !session && router.push("/");
+      !session ? router.push("/") :setCurrentEventId(eventId);
     }
+  
+    
   }, []);
   useEffect(() => {
     {

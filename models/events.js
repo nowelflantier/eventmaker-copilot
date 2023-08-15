@@ -6,7 +6,9 @@ const EventSchema = new mongoose.Schema({
   website_domain_name: { type: String },
   start_date: { type: String },
   end_date: { type: String },
-  type: {type: String},
+  type_of_content: {type: String},
+  type_of_event: {type: String},
+  thematics:  {type: String},
 });
 
 const Event = mongoose.model("Event", EventSchema);

@@ -27,6 +27,7 @@ export const UserProvider = ({ children }) => {
   const [first_name, setFirst_name] = useState(null)
   const [last_name, setLast_name] = useState(null)
   const [favoriteEvents, setFavoriteEvents] = useState([]);
+  const [currentEventId, setCurrentEventId] = useState(null)
 
 
   useEffect(() => {
@@ -53,6 +54,8 @@ export const UserProvider = ({ children }) => {
     last_name,
     favoriteEvents,
     setFavoriteEvents,
+    setCurrentEventId,
+    currentEventId,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

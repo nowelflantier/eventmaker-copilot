@@ -2,6 +2,7 @@ import "@styles/globals.css";
 import Navbar from "@components/Navbar";
 import Provider from "@components/Provider";
 import { UserProvider } from "@utils/UserContext";
+import { EventProvider } from "@utils/EventContext";
 
 
 
@@ -17,6 +18,7 @@ const RootLayout = ({children}) => {
       <body>
         <Provider>
           <UserProvider>
+            <EventProvider>
         <div className="main">
           <div className="gradient" />
         </div>
@@ -24,6 +26,7 @@ const RootLayout = ({children}) => {
           <Navbar/>
           {children}
         </main>
+        </EventProvider>
         </UserProvider>
         </Provider>
       </body>
