@@ -1,6 +1,7 @@
-import Feed from "@components/Feed";
-import User from "@models/user";
+
 import Setup from "@components/Setup";
+import User from "@models/user";
+
 
 const Home = () => { 
 
@@ -18,7 +19,6 @@ const Home = () => {
       <br/>
       <span className="text-xs mb-16">work in progress</span></p>
       <Setup/>
-      
     </section>  
   );
 };

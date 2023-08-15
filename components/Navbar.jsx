@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useUser } from "@utils/UserContext";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Navbar = () => {
   const { data: session } = useSession();
-  // console.log(session);
+  const { user, userName } = useUser();
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
@@ -36,6 +37,8 @@ const Navbar = () => {
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
+               {user && !user.token && (<Link  className="black_btn" href="/profile/edit">Associer un token</Link>)}
+               {user && user.token && (<Link  className="black_btn" href="/dashboard">Dashboard</Link>)}
             <button type="button" onClick={signOut} className="outline_btn">
               Se déconnecter
             </button>
@@ -89,9 +92,11 @@ const Navbar = () => {
                 >
                   Mon profil
                 </Link>
+                {user && user.token && (<Link  className="black_btn mt-5" href="/dashboard">Dashboard</Link>)}
+                {user && !user.token && (<Link  className="black_btn w-full mt-4" href="/profile/edit">Associer un token</Link>)}
                 <button
                   type="button"
-                  className="mt-5 w-full black_btn"
+                  className="mt-5 w-full outline_btn"
                   onClick={() => {
                     setToggleDropdown(false);
                     signOut();

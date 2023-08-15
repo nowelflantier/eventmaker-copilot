@@ -5,13 +5,19 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Profile from "@components/Profile";
 import { useUser } from "@utils/UserContext";
 import Form from "@components/Form";
+import { useSession } from "next-auth/react";
 
 const EditProfil = ({ params }) => {
+  const { data: session } = useSession();
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
   const { user, userName, id, token, setToken,setLast_name ,setFirst_name,last_name, first_name } = useUser();
   const [userData, setUserData] = useState([]);
 
+  useEffect(() => {
+    {!session && router.push('/')}
+  }, [])
+  
   useEffect(() => {
     setUserData({
       userName: userName,

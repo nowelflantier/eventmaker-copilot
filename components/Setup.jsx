@@ -2,13 +2,13 @@
 import React from "react";
 import { useUser } from "@utils/UserContext";
 import Link from "next/link";
-import Feed from "./Feed";
+// import Feed from "./Feed";
 
 const Setup = () => {
   const { user, userName } = useUser();
   return (
     <div>
-      {user && !user.token && (
+      {user && !user.token ? (
         <div className="prompt_card mt-10 mb-10">
           <div className="mx-auto max-w-md text-center">
             <h3 className="text-center">
@@ -23,8 +23,22 @@ const Setup = () => {
             </Link>
           </div>
         </div>
+      ) : (
+        <div className="prompt_card mt-10 mb-10">
+          <div className="mx-auto max-w-md text-center">
+            <h3 className="text-center">
+              <span className="green_gradient text-center font-semibold">
+                Bonjour {user.first_name} !
+              </span>
+              <br />
+              Retrouvez vos évènements sur votre dashboard :
+            </h3>
+            <Link className="black_btn mt-5 mx-auto" href="/dashboard">
+              Dashboard
+            </Link>
+          </div>
+        </div>
       )}
-      {user && user.token && <Feed />}
     </div>
   );
 };
