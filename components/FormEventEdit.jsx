@@ -4,10 +4,17 @@ const FormEventEdit = ({
   type,
   event,
   submitting,
-  handleChange,
   handleSubmit,
   setEvent,
 }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEvent((prevEvent) => ({
+      ...prevEvent,
+      [name]: value,
+    }));
+    console.log(event);
+  };
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <form
@@ -19,10 +26,9 @@ const FormEventEdit = ({
             Quel type de contenu souhaitez-vous générer pour votre évènement ?
           </span>
           <input
+          name="type_of_content" //
             value={event?.type_of_content || ""}
-            onChange={(e) => {
-              setEvent({ ...event, type_of_content: e.target.value });
-            }}
+            onChange={handleChange}
             placeholder="Ex : Emails marketing pour des prospects froids"
             required
             className="form_input"
@@ -33,10 +39,9 @@ const FormEventEdit = ({
             Quel est le type d'évènement qui décrit le mieux votre évènement ?
           </span>
           <input
+          name="type_of_event"
             value={event?.type_of_event || ""}
-            onChange={(e) => {
-              setEvent({ ...event, type_of_event: e.target.value });
-            }}
+            onChange={handleChange}
             placeholder="Ex : Congrès professionnel dédié au networking"
             required
             className="form_input"
@@ -47,10 +52,9 @@ const FormEventEdit = ({
             Quelles sont les thématiques principales de votre évènement ?
           </span>
           <input
-            value={event?.thematics}
-            onChange={(e) => {
-              setEvent({ ...event, thematics: e.target.value });
-            }}
+            name="thematics"
+            value={event?.thematics || ""}
+            onChange={handleChange}
             placeholder="Ex : Marketing, Evènementiel, Data"
             required
             className="form_input"

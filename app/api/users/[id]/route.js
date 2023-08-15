@@ -23,9 +23,7 @@ export const PATCH = async (req, { params }) => {
   try {
     await connectToBD();
     const user = await User.findById(params.id);
-    console.log("Événement favori:", favoriteEvent);
-
-    console.log({ action, favoriteEvent });
+    
     if (!user) return new Response("User not found", { status: 404 });
     // Assigner seulement si la valeur est définie
     if (token !== undefined) user.token = token;
