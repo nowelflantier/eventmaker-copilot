@@ -18,14 +18,28 @@ export const GET = async (req, { params }) => {
 };
 
 export const PATCH = async (req, { params }) => {
-  const { token, first_name, last_name } = await req.json();
+  const { token, first_name, last_name, favoriteEvent, action } =
+    await req.json();
   try {
     await connectToBD();
     const user = await User.findById(params.id);
+    console.log({ action, favoriteEvent });
     if (!user) return new Response("User not found", { status: 404 });
-    user.token = token;
-    user.first_name = first_name;
-    user.last_name = last_name;
+    // Assigner seulement si la valeur est définie
+    if (token !== undefined) user.token = token;
+    if (first_name !== undefined) user.first_name = first_name;
+    if (last_name !== undefined) user.last_name = last_name;
+    if (!user.favoriteEvents) {
+      user.favoriteEvents = [];
+    }
+    if (action === "add") {
+      user.favoriteEvents.push(favoriteEvent);
+    } else if (action === "remove") {
+      user.favoriteEvents = user.favoriteEvents.filter(
+        (e) => e.id !== favoriteEvent.id
+      );
+    }
+    user.markModified("favoriteEvents");
     user.markModified("token");
     user.markModified("first_name");
     user.markModified("last_name");
@@ -33,6 +47,7 @@ export const PATCH = async (req, { params }) => {
     await user.save();
     return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
     return new Response("Failed to update token", { status: 500 });
   }
 };

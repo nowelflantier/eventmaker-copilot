@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
-const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
+const EventCard = ({ event, handleTagClick, handleAddFavorite, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
   const { data: session } = useSession();
   const pathName = usePathname();
@@ -40,26 +40,23 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
               📆 - {event.title}
             </h3>
             <p className="font-inter text-sm text-gray-500">
-              {/* organizer : {event.organizer}
-              <br /> */}
               start_date : {event.start_date}
               <br />
               end_date : {event.end_date}
               <br />
-              {/* timezone : {event.timezone}
-              <br />
-              website_domain_name : {event.website_domain_name}
-              <br /> */}
               Guests inscrits : {event.guest_count}
-              <br />
-              {/* primary_color : {event.primary_color}
-              <br />
-              secondary_color : {event.secondary_color}
-              <br /> */}
             </p>
           </div>
         </div>
         <div className="flex flex-col gap-3">
+          <button onClick={() => handleAddFavorite(event)} className="copy_button">
+            <Image
+              width={20}
+              height={20}
+              alt="copy button"
+              src={"/assets/icons/empty-star.svg"}
+            />
+          </button>
           <a
             target="_blank"
             className="copy_button"
@@ -80,12 +77,12 @@ const EventCard = ({ event, handleTagClick, handleEdit, handleDelete }) => {
             href={`https://${event.website_domain_name}`}
             rel="noopener noreferrer"
           >
-          <Image
-            width={20}
-            height={20}
-            alt="copy button"
-            src={"/assets/icons/website.svg"}
-          />
+            <Image
+              width={20}
+              height={20}
+              alt="copy button"
+              src={"/assets/icons/website.svg"}
+            />
           </a>
         </div>
       </div>

@@ -26,6 +26,8 @@ export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [first_name, setFirst_name] = useState(null)
   const [last_name, setLast_name] = useState(null)
+  const [favoriteEvents, setFavoriteEvents] = useState([]);
+
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -49,6 +51,8 @@ export const UserProvider = ({ children }) => {
     first_name,
     token,
     last_name,
+    favoriteEvents,
+    setFavoriteEvents,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

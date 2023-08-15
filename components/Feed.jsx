@@ -6,10 +6,22 @@ import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchDataFromServer } from "./FetchEvents";
 
-const EventCardList = ({ events, areEventsLoaded, fetchEvents }) => {
+const EventCardList = ({
+  events,
+  areEventsLoaded,
+  handleAddFavorite,
+  fetchEvents,
+}) => {
   return areEventsLoaded ? (
     <div className="prompt_layout">
-    {events.map((event) => <EventCard event={event} key={event._id} />)}</div>
+      {events?.map((event) => (
+        <EventCard
+          event={event}
+          key={event._id}
+          handleAddFavorite={handleAddFavorite}
+        />
+      ))}
+    </div>
   ) : (
     <button onClick={fetchEvents} className="black_btn mt-5 mx-auto">
       Charger mes évènements
@@ -17,18 +29,63 @@ const EventCardList = ({ events, areEventsLoaded, fetchEvents }) => {
   );
 };
 const Feed = () => {
-  const { token, user, events, setEvents } = useUser();
+  const { user, events, setEvents, favoriteEvents, setFavoriteEvents } =
+    useUser();
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
   const [areEventsLoaded, setAreEventsLoaded] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
-
   const fetchEvents = async () => {
     const fetchedEvents = await fetchDataFromServer(user.token);
+    const fetchedUser = await fetch(`/api/users/${user._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    setFavoriteEvents(fetchedUser.favoriteEvents);
     setEvents(fetchedEvents);
     setAreEventsLoaded(true);
+  };
+
+  const updateUserFavorites = async (action, favoriteEvent) => {
+    console.log({ action, favoriteEvent });
+    const response = await fetch(`/api/users/${user._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action, // 'add' ou 'remove'
+        favoriteEvent, // L'événement à ajouter ou supprimer
+      }),
+    });
+    if (!response.ok) {
+      console.error("Erreur du serveur:", response.status, response.statusText);
+      const text = await response.text(); // Lire la réponse comme texte si ce n'est pas du JSON
+      console.error("Réponse du serveur:", text);
+      return;
+    }
+    const data = await response.json();
+    return data;
+  };
+
+  const handleAddFavorite = async (event) => {
+    const favoriteEvent = {
+      title: event.title,
+      _id: event._id,
+    };
+    console.log(favoriteEvent);
+    const updatedUser = await updateUserFavorites("add", favoriteEvent);
+    console.log(updatedUser);
+    setFavoriteEvents(updatedUser.favoriteEvents);
+  };
+
+  const handleRemoveFavorite = async (event) => {
+    const updatedUser = await updateUserFavorites("remove", event);
+    setFavoriteEvents(updatedUser.favoriteEvents);
   };
 
   useEffect(() => {
@@ -50,8 +107,6 @@ const Feed = () => {
     e.preventDefault();
     clearTimeout(searchTimeout);
     setSearchText(e.target.value);
-
-    // debounce method
     setSearchTimeout(
       setTimeout(() => {
         const searchResult = filterEvents(e.target.value);
@@ -59,12 +114,6 @@ const Feed = () => {
       }, 500)
     );
   };
-  // const handleTagClick = (tagName) => {
-  //   setSearchText(tagName);
-
-  //   const searchResult = filterPrompts(tagName);
-  //   setSearchedResults(searchResult);
-  // };
 
   return (
     session?.user &&
@@ -84,10 +133,27 @@ const Feed = () => {
             className="search_input peer mb-10"
           />
         </form>
-        {searchText
-          ? <EventCardList events={searchedResults} fetchEvents={fetchEvents} areEventsLoaded={areEventsLoaded} />
-          : <EventCardList events={events} fetchEvents={fetchEvents} areEventsLoaded={areEventsLoaded} />}
-            
+        {user.favoriteEvents && (
+          <EventCardList
+            events={favoriteEvents}
+            areEventsLoaded={areEventsLoaded}
+          />
+        )}
+        {searchText ? (
+          <EventCardList
+            events={searchedResults}
+            fetchEvents={fetchEvents}
+            handleAddFavorite={handleAddFavorite}
+            areEventsLoaded={areEventsLoaded}
+          />
+        ) : (
+          <EventCardList
+            events={events}
+            fetchEvents={fetchEvents}
+            handleAddFavorite={handleAddFavorite}
+            areEventsLoaded={areEventsLoaded}
+          />
+        )}
       </section>
     )
   );

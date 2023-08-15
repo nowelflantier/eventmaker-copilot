@@ -26,6 +26,12 @@ const UserSchema = new Schema({
   image: {
     type: String,
   },
+  favoriteEvents: [
+    {
+      title: {type: String,},
+      _id: {type: String,},
+    },
+  ],
 });
 
 const User = models.User || model("User", UserSchema)
