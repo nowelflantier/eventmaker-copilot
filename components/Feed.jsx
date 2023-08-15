@@ -55,7 +55,7 @@ const Feed = () => {
     setEvents(fetchedEvents);
     setAreEventsLoaded(true);
   };
-  console.log(favoriteEvents);
+  
   const updateUserFavorites = async (action, favoriteEvent) => {
     console.log({ action, favoriteEvent });
     const response = await fetch(`/api/users/${user._id}`, {
@@ -95,6 +95,11 @@ const Feed = () => {
     setFavoriteEvents(updatedUser.favoriteEvents);
   };
 
+  const filterNonFavoriteEvents = (allEvents, favoriteEvents) => {
+    return allEvents.filter(event => !favoriteEvents.some(fav => fav._id === event._id));
+  };
+  const nonFavoriteEvents = filterNonFavoriteEvents(events, favoriteEvents);
+
   useEffect(() => {
     {
       user && fetchEvents();
@@ -126,6 +131,21 @@ const Feed = () => {
     session?.user &&
     user?.token && (
       <section className="feed">
+        
+         {user.favoriteEvents.length > 0 && (
+           <><h2 className="font-bold text-xl ">
+           <span className="green_gradient text-center">Vos favoris</span>
+         </h2>
+          <EventCardList
+            events={favoriteEvents}
+            areEventsLoaded={areEventsLoaded}
+            key={`fav-${favoriteEvents._id}`}
+            handleRemoveFavorite={handleRemoveFavorite}
+            handleAddFavorite={handleAddFavorite}
+            favoriteEvents={favoriteEvents} // Ajoutez cette ligne
+
+          /></>
+        )}
         <h2 className="font-bold text-xl ">
           <span className="green_gradient text-center">Vos évènements</span>
         </h2>
@@ -140,17 +160,7 @@ const Feed = () => {
             className="search_input peer mb-10"
           />
         </form>
-        {user.favoriteEvents && (
-          <EventCardList
-            events={favoriteEvents}
-            areEventsLoaded={areEventsLoaded}
-            key={`fav-${favoriteEvents._id}`}
-            handleRemoveFavorite={handleRemoveFavorite}
-            handleAddFavorite={handleAddFavorite}
-            favoriteEvents={favoriteEvents} // Ajoutez cette ligne
-
-          />
-        )}
+       
         {searchText ? (
           <EventCardList
             events={searchedResults}
@@ -163,7 +173,7 @@ const Feed = () => {
           />
         ) : (
           <EventCardList
-            events={events}
+            events={nonFavoriteEvents}
             fetchEvents={fetchEvents}
             handleAddFavorite={handleAddFavorite}
             areEventsLoaded={areEventsLoaded}
