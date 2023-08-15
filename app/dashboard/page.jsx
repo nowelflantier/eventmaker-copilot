@@ -1,9 +1,20 @@
-import Setup from "@components/Setup"
-import Feed from "@components/Feed"
-const Dashboard = () => {
-  return (
-    <Feed/>
-  )
-}
+"use client";
+import Setup from "@components/Setup";
+import Feed from "@components/Feed";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
-export default Dashboard
+const Dashboard = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+
+  useEffect(() => {
+    {!session && router.push('/')}
+  }, [])
+  
+  return <Feed />;
+};
+
+export default Dashboard;
