@@ -28,7 +28,7 @@ const Setup = () => {
           <div className="mx-auto max-w-md text-center">
             <h3 className="text-center">
               <span className="green_gradient text-center font-semibold">
-                Bonjour {user.first_name} !
+                Bonjour {userName} !
               </span>
               <br />
               Retrouvez vos évènements sur votre dashboard :
