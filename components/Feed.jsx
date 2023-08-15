@@ -6,6 +6,8 @@ import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchDataFromServer } from "./FetchEvents";
 
+
+
 const EventCardList = ({
   events,
   areEventsLoaded,
@@ -40,7 +42,7 @@ const Feed = () => {
   const [areEventsLoaded, setAreEventsLoaded] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
-
+  
   const fetchEvents = async () => {
     const fetchedEvents = await fetchDataFromServer(user.token);
     const fetchedUserResponse = await fetch(`/api/users/${user._id}`, {
@@ -83,6 +85,8 @@ const Feed = () => {
       title: event.title,
       _id: event._id,
       website_domain_name: event.website_domain_name,
+      start_date: event.start_date,
+      end_date: event.end_date,
     };
     console.log(favoriteEvent);
     const updatedUser = await updateUserFavorites("add", favoriteEvent);
@@ -132,7 +136,7 @@ const Feed = () => {
     user?.token && (
       <section className="feed">
         
-         {user.favoriteEvents.length > 0 && (
+         {favoriteEvents.length > 0 && (
            <><h2 className="font-bold text-xl ">
            <span className="green_gradient text-center">Vos favoris</span>
          </h2>
