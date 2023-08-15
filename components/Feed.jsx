@@ -5,6 +5,7 @@ import EventCard from "./EventCard";
 import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchDataFromServer } from "./FetchEvents";
+import { useRouter } from "next/navigation";
 
 
 
@@ -154,14 +155,14 @@ const Feed = () => {
           <span className="green_gradient text-center">Vos évènements</span>
         </h2>
 
-        <form className="relative w-full flex-center">
+        <form className="relative w-full mt-2 flex-center">
           <input
             type="text"
             placeholder="Rechercher un évènement"
             value={searchText}
             onChange={handleSearchChange}
             required
-            className="search_input peer mb-10"
+            className="search_input peer mb-5"
           />
         </form>
        
