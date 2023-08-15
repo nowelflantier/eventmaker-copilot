@@ -3,11 +3,14 @@ import EventDetailledView from "@components/EventDetailledView";
 import { useSession } from "next-auth/react";
 import { useUser } from "@utils/UserContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const EventPage = () => {
   const { user } = useUser();
+  const { data: session } = useSession();
+  const router = useRouter()
+  const [isEventLoaded, setIsEventLoaded] = useState(false);
   const params = useParams();
   const [eventsDetails, setEventsDetails] = useState()
   const eventId = params.id
@@ -23,14 +26,18 @@ const EventPage = () => {
     const fetchedUser = await fetchedUserResponse.json();
     console.log(fetchedEventDetails);
     setEventsDetails(fetchedEventDetails)
+    setIsEventLoaded(true)
   };
 
+  useEffect(() => {
+    {!session && router.push('/')}
+  }, [])
   useEffect(() => {
     {
       user && fetchEventDetails();
     }
   }, [user]);
-  return <EventDetailledView event={eventsDetails} />;
+  return <EventDetailledView event={eventsDetails} isEventLoaded={isEventLoaded} />;
 };
 
 export default EventPage;

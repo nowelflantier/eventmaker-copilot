@@ -100,6 +100,9 @@
 .blue_gradient {
   @apply bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent;
 }
+.black_gradient {
+  @apply bg-gradient-to-r from-black via-zinc-500 to-gray-900 bg-clip-text text-transparent;
+}
 
 .desc {
   @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
@@ -151,6 +154,9 @@
 /* PromptCard Component */
 .prompt_card {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+}
+.prompt_infocard {
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter  w-auto h-fit;
 }
 
 .flex-center {

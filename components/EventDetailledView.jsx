@@ -1,24 +1,30 @@
-const EventDetailledView = ({ event }) => {
+import { parseISO, format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+ 
+const EventDetailledView = ({ event,isEventLoaded }) => {
+  const start_date = event?.start_date ? parseISO(event.start_date) : null;
+  const end_date = event?.end_date ? parseISO(event.end_date) : null;
+  const formattedStartDate = start_date ? format(start_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
+  const formattedEndDate = end_date ? format(end_date, 'dd/MM/yyyy', { locale: fr }) : 'N/A';
+
   const links = [
-    { name: "Open roles", href: "#" },
-    { name: "Internship program", href: "#" },
-    { name: "Our values", href: "#" },
-    { name: "Meet our leadership", href: "#" },
+    { name: "Accéder au back office", href: `https://app.eventmaker.io/?locale=fr&redirected_event_id=${event?._id}` },
+    { name: "Accéder au site de l'évènement", href: `https://${event?.website_domain_name}` },
+
   ];
   const stats = [
-    { name: "Offices worldwide", value: "12" },
-    { name: "Full-time colleagues", value: "300+" },
-    { name: "Hours per week", value: "40" },
-    { name: "Paid time off", value: "Unlimited" },
+    { name: "Date de début", value: formattedStartDate },
+    { name: "Date de fin", value: formattedEndDate },
+  
   ]; 
 
   return (
-    <div className="relative isolate w-screen overflow-hidden bg-gray-900 py-24 sm:py-32">
-      <img
+    <div className="relative isolate w-11/12  glassmorphism overflow-hidden bg-gray-900 py-24 sm:py-32">
+      {/* <img
         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
         alt=""
-        className="absolute blur-xl inset-0 -z-10 h-full w-full object-cover object-right md:object-center"
-      />
+        className=" absolute opacity-50 blur-lg inset-0 -z-10 h-full w-full object-cover object-right md:object-center"
+      /> */}
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -43,30 +49,31 @@ const EventDetailledView = ({ event }) => {
           }}
         />
       </div>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 lg:px-3">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            {event?.title}
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-300">
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+            <span className="green_gradient">{event?.title} </span><br/>
+            <span className='black_gradient text-2xl'>{event?.organizer}</span>
+          </h1>
+          <p className="mt-6 text-lg leading-8 text-gray-500">
             {event?.description}
           </p>
         </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
-          <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
-              <a key={link.name} href={link.href}>
+              <a key={link.name} href={link.href} target="_blank">
                 {link.name} <span aria-hidden="true">&rarr;</span>
               </a>
             ))}
           </div>
-          <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-6 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.name} className="flex flex-col-reverse">
-                <dt className="text-base leading-7 text-gray-300">
+              <div key={stat.name} className="flex prompt_infocard flex-col-reverse">
+                <dt className="text-base leading-7 text-gray-500">
                   {stat.name}
                 </dt>
-                <dd className="text-2xl font-bold leading-9 tracking-tight text-white">
+                <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
                   {stat.value}
                 </dd>
               </div>
