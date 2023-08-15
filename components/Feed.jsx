@@ -159,7 +159,7 @@ const Feed = () => {
             className="search_input peer mb-5"
           />
         </form>
-       
+        
         {searchText ? (
           <EventCardList
             events={searchedResults}
