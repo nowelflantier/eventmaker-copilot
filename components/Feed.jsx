@@ -10,7 +10,9 @@ const EventCardList = ({
   events,
   areEventsLoaded,
   handleAddFavorite,
+  handleRemoveFavorite,
   fetchEvents,
+  favoriteEvents,
 }) => {
   return areEventsLoaded ? (
     <div className="prompt_layout">
@@ -18,7 +20,9 @@ const EventCardList = ({
         <EventCard
           event={event}
           key={event._id}
+          isFavorite={favoriteEvents?.some((e) => e._id === event._id)}
           handleAddFavorite={handleAddFavorite}
+          handleRemoveFavorite={handleRemoveFavorite}
         />
       ))}
     </div>
@@ -39,17 +43,19 @@ const Feed = () => {
 
   const fetchEvents = async () => {
     const fetchedEvents = await fetchDataFromServer(user.token);
-    const fetchedUser = await fetch(`/api/users/${user._id}`, {
+    const fetchedUserResponse = await fetch(`/api/users/${user._id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
+    const fetchedUser = await fetchedUserResponse.json();
+
     setFavoriteEvents(fetchedUser.favoriteEvents);
     setEvents(fetchedEvents);
     setAreEventsLoaded(true);
   };
-
+  console.log(favoriteEvents);
   const updateUserFavorites = async (action, favoriteEvent) => {
     console.log({ action, favoriteEvent });
     const response = await fetch(`/api/users/${user._id}`, {
@@ -76,6 +82,7 @@ const Feed = () => {
     const favoriteEvent = {
       title: event.title,
       _id: event._id,
+      website_domain_name: event.website_domain_name,
     };
     console.log(favoriteEvent);
     const updatedUser = await updateUserFavorites("add", favoriteEvent);
@@ -137,6 +144,11 @@ const Feed = () => {
           <EventCardList
             events={favoriteEvents}
             areEventsLoaded={areEventsLoaded}
+            key={`fav-${favoriteEvents._id}`}
+            handleRemoveFavorite={handleRemoveFavorite}
+            handleAddFavorite={handleAddFavorite}
+            favoriteEvents={favoriteEvents} // Ajoutez cette ligne
+
           />
         )}
         {searchText ? (
@@ -145,6 +157,9 @@ const Feed = () => {
             fetchEvents={fetchEvents}
             handleAddFavorite={handleAddFavorite}
             areEventsLoaded={areEventsLoaded}
+            handleRemoveFavorite={handleRemoveFavorite}
+
+            favoriteEvents={favoriteEvents}
           />
         ) : (
           <EventCardList
@@ -152,6 +167,9 @@ const Feed = () => {
             fetchEvents={fetchEvents}
             handleAddFavorite={handleAddFavorite}
             areEventsLoaded={areEventsLoaded}
+            handleRemoveFavorite={handleRemoveFavorite}
+            favoriteEvents={favoriteEvents} 
+
           />
         )}
       </section>

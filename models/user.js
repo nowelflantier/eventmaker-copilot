@@ -30,6 +30,7 @@ const UserSchema = new Schema({
     {
       title: {type: String,},
       _id: {type: String,},
+      website_domain_name: {type: String,},
     },
   ],
 });

@@ -23,6 +23,8 @@ export const PATCH = async (req, { params }) => {
   try {
     await connectToBD();
     const user = await User.findById(params.id);
+    console.log("Événement favori:", favoriteEvent);
+
     console.log({ action, favoriteEvent });
     if (!user) return new Response("User not found", { status: 404 });
     // Assigner seulement si la valeur est définie
@@ -33,10 +35,19 @@ export const PATCH = async (req, { params }) => {
       user.favoriteEvents = [];
     }
     if (action === "add") {
-      user.favoriteEvents.push(favoriteEvent);
+      // Vérifiez si l'événement est déjà dans les favoris
+      const isAlreadyFavorite = user.favoriteEvents.some(
+        (e) => e._id === favoriteEvent._id
+      );
+      // Si l'événement n'est pas déjà dans les favoris, ajoutez-le
+      if (!isAlreadyFavorite) {
+        user.favoriteEvents.push(favoriteEvent);
+      } else {
+        console.log("Événement déjà dans les favoris");
+      }
     } else if (action === "remove") {
       user.favoriteEvents = user.favoriteEvents.filter(
-        (e) => e.id !== favoriteEvent.id
+        (e) => e._id !== favoriteEvent._id
       );
     }
     user.markModified("favoriteEvents");
