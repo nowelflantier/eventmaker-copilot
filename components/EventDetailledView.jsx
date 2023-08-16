@@ -108,7 +108,8 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                 href={`/event/${event?._id}/edit`}
               >
                 <span className=" cta_text p-1 ">
-                  Générer les contenus de mon évènement avec Eventmaker Copilot{" "}
+                  Ajouter les informations de mon évènement
+                {" "}
                   <span aria-hidden="true">&rarr;</span>
                 </span>
               </Link>
@@ -118,7 +119,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                 href={`/event/${event?._id}/edit`}
               >
                 <span className=" cta_text p-1 ">
-                  Modifier les informations de votre évènement{" "}
+                  Modifier les informations de mon évènement{" "}
                   <span aria-hidden="true">&rarr;</span>
                 </span>
               </Link>
