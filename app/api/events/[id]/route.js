@@ -17,13 +17,15 @@ export const POST = async (req) => {
   try {
     await connectToBD();
     const eventData = await req.json();
+    const { id, ...rest } = eventData;
     const newEvent = new Event({
-      _id: new mongoose.Types.ObjectId(),
+      _id: eventData.id, // Utilisez l'ID fourni comme _id
       ...eventData,
     });
     await newEvent.save();
     return new Response(JSON.stringify(newEvent), { status: 201 });
   } catch (error) {
+    console.error(error); // Log l'erreur pour plus de détails
     return new Response("Failed to create event", { status: 500 });
   }
 };

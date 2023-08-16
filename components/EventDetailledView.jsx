@@ -156,7 +156,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                {event?.requests &&
+                {event?.requests && event?.requests !== undefined &&
                   event.requests.map((request) => (
                     <Link
                       key={request._id}

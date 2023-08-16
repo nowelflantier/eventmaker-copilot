@@ -13,40 +13,49 @@ const EditEventPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const { event, setEvent } = useEvent();
   const { data: session } = useSession();
-  const [eventDetailsToStore, setEventDetailsToStore] = useState({})
+  const [eventDetailsToStore, setEventDetailsToStore] = useState({});
   const router = useRouter();
   const params = useParams();
   const eventId = params.id;
 
   const fetchEventDetails = async () => {
     const token = user.token;
-    
+
     const fetchedEventDetails = await fetchEventsDetailsFromServer({
       token,
       eventId,
     });
-    setEvent(fetchedEventDetails);
+    const eventData = {
+      title: fetchedEventDetails.title,
+      id: fetchedEventDetails._id,
+      start_date: fetchedEventDetails.start_date,
+      end_date: fetchedEventDetails.end_date,
+      organizer: fetchedEventDetails.organizer,
+      type_of_event: fetchedEventDetails.type_of_event,
+      public_type: fetchedEventDetails.public_type,
+      thematics: fetchedEventDetails.thematics,
+      requests: fetchEventDetails.requests,
+    };
+    // console.log(fetchedEventDetails);
+    setEvent(eventData);
   };
 
   useEffect(() => {
     {
-       user && fetchEventDetails();
+      user && fetchEventDetails();
     }
   }, [user]);
-
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-  
+
     try {
       // Vérifier si l'événement existe
       const checkResponse = await fetch(`/api/events/${eventId}`, {
         method: "GET",
       });
-  
+
       let response;
       if (checkResponse.ok) {
         console.log("rep ok", event);
@@ -57,7 +66,8 @@ const EditEventPage = () => {
           body: JSON.stringify(event),
         });
       } else {
-        console.log("rep new", event);
+      
+        console.log("rep new");
         // Si l'événement n'existe pas, créer
         response = await fetch(`/api/events/${eventId}`, {
           method: "POST",
@@ -65,19 +75,20 @@ const EditEventPage = () => {
           body: JSON.stringify(event),
         });
       }
-  
+
       if (response.ok) {
         // Rediriger vers la page de l'événement ou une autre page si l'événement est créé/mis à jour avec succès
         router.push(`/event/${eventId}`);
         console.log(event);
       }
     } catch (error) {
-      console.log(error.message);
+      console.error("Erreur lors de la création de l'événement:", error);
+  return new Response("Failed to create event", { status: 500 });
     } finally {
       setSubmitting(false);
     }
   };
-  
+
   return (
     <section className="w-full">
       <h1 className="head_text text-left">
