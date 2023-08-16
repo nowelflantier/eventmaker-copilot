@@ -10,7 +10,7 @@ const Home = () => {
       <h1 className="head_text text-center">
       <span className="green_gradient text-center">Avec Eventmaker Copilot </span>
         <br className="max-md:hidden" />
-         pilotez vos évènements
+         boostez vos évènements
          <br className="max-md:hidden" />
          <span className="green_gradient text-center"> avec la puissance de l'IA</span>
       </h1>

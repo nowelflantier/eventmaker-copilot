@@ -73,7 +73,7 @@ const Navbar = () => {
         
         {session?.user ? (
           <div className="flex gap-3">
-            <Link  className="black_btn" href="/dashboard">Dashboard</Link>
+            {user?.token && <Link  className="black_btn" href="/dashboard">Dashboard</Link>}
             <Image
               src={session?.user.image}
               width={37}
