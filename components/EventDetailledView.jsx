@@ -28,7 +28,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
   ];
   const data = [
     { name: "Type d'évènement", value: event?.type_of_event },
-    { name: "Type de contenu", value: event?.type_of_content },
+    { name: "Public", value: event?.public_type },
     { name: "Thématiques", value: event?.thematics },
   ];
 
@@ -69,7 +69,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             {event?.description}
           </p>
         </div>
-       
+
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
@@ -93,35 +93,36 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
               </div>
             ))}
           </dl>
-          
+
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-          <h2 className="text-2xl font-bold text-center tracking-tight text-white sm:text-6xl">
-            <span className="green_gradient">Votre contenu personnalisé </span>
-            {/* <br className="leading-3"/> */}
+            <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-6xl">
+              Les informations de <span className="green_gradient">
+                 votre évènement
+              </span>
            
-          </h2>
-          <p className="ext-2xl leading-3 font-bold text-center tracking-tight text-white sm:text-6xl"> <span className="black_gradient text-2xl">pour votre évènement</span></p>
-          {!event?.type_of_content ? (
-          <Link
-            className=" prompt_cta_card text-center"
-            href={`/event/${event?._id}/edit`}
-          >
-            <span className=" cta_text p-1 ">
-              Générer les contenus de mon évènement avec Eventmaker Copilot{" "}
-              <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Link>
-        ) : (
-          <Link
-            className=" prompt_cta_card text-center"
-            href={`/event/${event?._id}/edit`}
-          >
-            <span className=" cta_text p-1 ">
-              Modifier les informations de votre évènement{" "}
-              <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Link>
-        )}
+            </h2>
+      
+            {!event?.type_of_content ? (
+              <Link
+                className=" prompt_cta_card text-center"
+                href={`/event/${event?._id}/edit`}
+              >
+                <span className=" cta_text p-1 ">
+                  Générer les contenus de mon évènement avec Eventmaker Copilot{" "}
+                  <span aria-hidden="true">&rarr;</span>
+                </span>
+              </Link>
+            ) : (
+              <Link
+                className=" prompt_cta_card text-center"
+                href={`/event/${event?._id}/edit`}
+              >
+                <span className=" cta_text p-1 ">
+                  Modifier les informations de votre évènement{" "}
+                  <span aria-hidden="true">&rarr;</span>
+                </span>
+              </Link>
+            )}
             {event?.type_of_event &&
               data.map((stat) => (
                 <div key={stat.name} className="flex card flex-col-reverse">

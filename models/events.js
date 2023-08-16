@@ -9,7 +9,10 @@ const EventSchema = new Schema({
   end_date: { type: String },
   type_of_content: {type: String},
   type_of_event: {type: String},
+  public_type:  {type: String},
+  support:  {type: String},
   thematics:  {type: String},
+  target:  {type: String},
 });
 
 const Event = models.Event || model("Event", EventSchema)

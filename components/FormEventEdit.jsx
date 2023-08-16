@@ -1,12 +1,9 @@
 import Link from "next/link";
+import { useState } from "react";
 
-const FormEventEdit = ({
-  type,
-  event,
-  submitting,
-  handleSubmit,
-  setEvent,
-}) => {
+const FormEventEdit = ({ type, event, submitting, handleSubmit, setEvent }) => {
+  const [eventType, setEventType] = useState(event?.type_of_event || "");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEvent((prevEvent) => ({
@@ -23,30 +20,108 @@ const FormEventEdit = ({
       >
         <label>
           <span className="font-satoshi font-bold text-base text-gray-700">
-            Quel type de contenu souhaitez-vous générer pour votre évènement ?
+            Quel est le type de votre évènement ?
           </span>
-          <textarea
-          name="type_of_content" //
-            value={event?.type_of_content || ""}
-            onChange={handleChange}
-            placeholder="Ex : Emails marketing pour des prospects froids"
-            required
-            className="form_input"
-          />
-        </label>
-        <label>
-          <span className="font-satoshi font-bold text-base text-gray-700">
-            Quel est le type d'évènement qui décrit le mieux votre évènement ?
-          </span>
-          <textarea
-          name="type_of_event"
+          <select
+            name="type_of_event"
             value={event?.type_of_event || ""}
             onChange={handleChange}
-            placeholder="Ex : Congrès professionnel dédié au networking"
             required
             className="form_input"
-          />
+          >
+            <option value="" disabled hidden>
+              Choisissez une option
+            </option>
+
+            <option value="Salon">Salon</option>
+            <option value="Foire">Foire</option>
+            <option value="Congrès">Congrès</option>
+          </select>
         </label>
+        {event?.type_of_event && (
+          <label>
+            <span className="font-satoshi font-bold text-base text-gray-700">
+              Pour quel public ?
+            </span>
+            <select
+              name="public_type"
+              value={event?.public_type || ""}
+              onChange={handleChange}
+              required
+              className="form_input"
+            >
+              <option value="" disabled hidden>
+              Choisissez une option
+            </option>
+              <option value="B2B">B2B</option>
+              <option value="B2C">B2C</option><option value="B2C & B2B">B2C & B2B</option>
+            </select>
+          </label>
+        )}
+         {event?.public_type && (
+        <label>
+          <span className="font-satoshi font-bold text-base text-gray-700">
+            Quel est le type de contenu souhaitez-vous générer ?
+          </span>
+          <select
+            name="type_of_content"
+            value={event?.type_of_content || ""}
+            onChange={handleChange}
+            required
+            className="form_input"
+          >
+            <option value="" disabled hidden>
+              Choisissez une option
+            </option>
+            <option value="Texte">Texte</option>
+            <option value="Structure">Structure</option>
+          </select>
+        </label>
+         )}
+          {event?.type_of_content && (
+        <label>
+          <span className="font-satoshi font-bold text-base text-gray-700">
+            Pour quel support ?
+          </span>
+          <select
+            name="support"
+            value={event?.support || ""}
+            onChange={handleChange}
+            required
+            className="form_input"
+          >
+            <option value="" disabled hidden>
+              Choisissez une option
+            </option>
+            <option value="Site web">Site web</option>
+            <option value="Email">Email</option>
+          </select>
+        </label>)}
+        {event?.support && (
+        <label>
+          <span className="font-satoshi font-bold text-base text-gray-700">
+            Quelle est la cible de votre contenu ?
+          </span>
+          <select
+            name="target"
+            value={event?.target || ""}
+            onChange={handleChange}
+            required
+            className="form_input"
+          >
+            <option value="" disabled hidden>
+              Choisissez une option
+            </option>
+            <option value="Grand public">Grand public</option>
+            <option value="Visiteurs">Visiteurs</option>
+            <option value="Prospects">Prospects</option>
+            <option value="Exposants">Exposants</option>
+            <option value="Organisation">Organisation</option>
+            <option value="VIP">VIP</option>
+            <option value="Invités">Invités</option>
+          </select>
+        </label>)}
+        {event?.target && (
         <label>
           <span className="font-satoshi font-bold text-base text-gray-700">
             Quelles sont les thématiques principales de votre évènement ?
@@ -59,7 +134,8 @@ const FormEventEdit = ({
             required
             className="form_input"
           />
-        </label>
+        </label>)}
+
         <div className="flex-end mx-3 mb-5 gap-4">
           <Link href="/" className="text-gray-500 text-sm">
             Annuler

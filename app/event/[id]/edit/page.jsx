@@ -25,12 +25,10 @@ const EditEventPage = () => {
       token,
       eventId,
     });
-    console.log(fetchedEventDetails);
     setEvent(fetchedEventDetails);
   };
 
   useEffect(() => {
-    console.log(event);
     {
        user && fetchEventDetails();
     }
@@ -51,6 +49,7 @@ const EditEventPage = () => {
   
       let response;
       if (checkResponse.ok) {
+        console.log("rep ok", event);
         // Si l'événement existe, mettre à jour
         response = await fetch(`/api/events/${eventId}`, {
           method: "PATCH",
@@ -58,6 +57,7 @@ const EditEventPage = () => {
           body: JSON.stringify(event),
         });
       } else {
+        console.log("rep new", event);
         // Si l'événement n'existe pas, créer
         response = await fetch(`/api/events/${eventId}`, {
           method: "POST",
@@ -69,7 +69,7 @@ const EditEventPage = () => {
       if (response.ok) {
         // Rediriger vers la page de l'événement ou une autre page si l'événement est créé/mis à jour avec succès
         router.push(`/event/${eventId}`);
-        console.log("ok");
+        console.log(event);
       }
     } catch (error) {
       console.log(error.message);
