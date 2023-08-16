@@ -58,70 +58,8 @@ const FormEventEdit = ({ type, event, submitting, handleSubmit, setEvent }) => {
             </select>
           </label>
         )}
-         {event?.public_type && (
-        <label>
-          <span className="font-satoshi font-bold text-base text-gray-700">
-            Quel est le type de contenu souhaitez-vous générer ?
-          </span>
-          <select
-            name="type_of_content"
-            value={event?.type_of_content || ""}
-            onChange={handleChange}
-            required
-            className="form_input"
-          >
-            <option value="" disabled hidden>
-              Choisissez une option
-            </option>
-            <option value="Texte">Texte</option>
-            <option value="Structure">Structure</option>
-          </select>
-        </label>
-         )}
-          {event?.type_of_content && (
-        <label>
-          <span className="font-satoshi font-bold text-base text-gray-700">
-            Pour quel support ?
-          </span>
-          <select
-            name="support"
-            value={event?.support || ""}
-            onChange={handleChange}
-            required
-            className="form_input"
-          >
-            <option value="" disabled hidden>
-              Choisissez une option
-            </option>
-            <option value="Site web">Site web</option>
-            <option value="Email">Email</option>
-          </select>
-        </label>)}
-        {event?.support && (
-        <label>
-          <span className="font-satoshi font-bold text-base text-gray-700">
-            Quelle est la cible de votre contenu ?
-          </span>
-          <select
-            name="target"
-            value={event?.target || ""}
-            onChange={handleChange}
-            required
-            className="form_input"
-          >
-            <option value="" disabled hidden>
-              Choisissez une option
-            </option>
-            <option value="Grand public">Grand public</option>
-            <option value="Visiteurs">Visiteurs</option>
-            <option value="Prospects">Prospects</option>
-            <option value="Exposants">Exposants</option>
-            <option value="Organisation">Organisation</option>
-            <option value="VIP">VIP</option>
-            <option value="Invités">Invités</option>
-          </select>
-        </label>)}
-        {event?.target && (
+       
+        {event?.public_type && (
         <label>
           <span className="font-satoshi font-bold text-base text-gray-700">
             Quelles sont les thématiques principales de votre évènement ?

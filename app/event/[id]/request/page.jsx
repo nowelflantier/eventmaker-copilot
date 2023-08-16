@@ -4,10 +4,11 @@ import { useUser } from "@utils/UserContext";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
-import FormEventEdit from "@components/FormEventEdit";
-import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 
-const EditEventPage = () => {
+import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
+import FormRequest from "@components/FormRequest";
+
+const RequestPage = () => {
   const { user } = useUser();
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -89,8 +90,8 @@ const EditEventPage = () => {
         pour générer les meilleurs contenus possibles pour votre évènement grâce
         à Eventmaker Copilot.
       </p>
-      <FormEventEdit
-        type="Enregistrer mes informations"
+      <FormRequest
+        type="Générer mon contenu !"
         event={event}
         submitting={submitting}
         handleSubmit={handleSubmit}
@@ -100,4 +101,4 @@ const EditEventPage = () => {
   );
 };
 
-export default EditEventPage;
+export default RequestPage;

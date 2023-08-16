@@ -102,7 +102,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
            
             </h2>
       
-            {!event?.type_of_content ? (
+            {!event?.type_of_event ? (
               <Link
                 className=" prompt_cta_card text-center"
                 href={`/event/${event?._id}/edit`}

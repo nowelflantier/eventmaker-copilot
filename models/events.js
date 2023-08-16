@@ -7,12 +7,18 @@ const EventSchema = new Schema({
   start_date: { type: String },
   organizer: {type: String},
   end_date: { type: String },
-  type_of_content: {type: String},
   type_of_event: {type: String},
   public_type:  {type: String},
-  support:  {type: String},
   thematics:  {type: String},
-  target:  {type: String},
+  
+  requests: [
+    {
+      _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
+      type_of_content: {type: String},
+      target:  {type: String},
+      support:  {type: String},
+    }
+  ]
 });
 
 const Event = models.Event || model("Event", EventSchema)
