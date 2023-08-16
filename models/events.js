@@ -5,6 +5,7 @@ const EventSchema = new Schema({
   _id: { type: String },
   website_domain_name: { type: String },
   start_date: { type: String },
+  organizer: {type: String},
   end_date: { type: String },
   type_of_content: {type: String},
   type_of_event: {type: String},

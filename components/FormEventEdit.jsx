@@ -16,7 +16,7 @@ const FormEventEdit = ({
     console.log(event);
   };
   return (
-    <section className="w-full max-w-full flex-start flex-col">
+    <section className="w-full max-w-full flex-start mb-10 flex-col">
       <form
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
         onSubmit={handleSubmit}
@@ -25,7 +25,7 @@ const FormEventEdit = ({
           <span className="font-satoshi font-bold text-base text-gray-700">
             Quel type de contenu souhaitez-vous générer pour votre évènement ?
           </span>
-          <input
+          <textarea
           name="type_of_content" //
             value={event?.type_of_content || ""}
             onChange={handleChange}
@@ -38,7 +38,7 @@ const FormEventEdit = ({
           <span className="font-satoshi font-bold text-base text-gray-700">
             Quel est le type d'évènement qui décrit le mieux votre évènement ?
           </span>
-          <input
+          <textarea
           name="type_of_event"
             value={event?.type_of_event || ""}
             onChange={handleChange}
@@ -51,7 +51,7 @@ const FormEventEdit = ({
           <span className="font-satoshi font-bold text-base text-gray-700">
             Quelles sont les thématiques principales de votre évènement ?
           </span>
-          <input
+          <textarea
             name="thematics"
             value={event?.thematics || ""}
             onChange={handleChange}

@@ -26,15 +26,14 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Date de début", value: formattedStartDate },
     { name: "Date de fin", value: formattedEndDate },
   ];
-  const data = 
-  [
+  const data = [
     { name: "Type d'évènement", value: event?.type_of_event },
     { name: "Type de contenu", value: event?.type_of_content },
     { name: "Thématiques", value: event?.thematics },
   ];
 
   return (
-    <div className="relative isolate w-11/12  glassmorphism overflow-hidden bg-gray-900 py-24 sm:py-32">
+    <div className="relative isolate w-11/12  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-32">
       {/* <img
         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
         alt=""
@@ -74,11 +73,28 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
           <p className="mt-6 text-lg leading-8 text-gray-500">
             {event?.description}
           </p>
-       
         </div>
-        <Link className=" prompt_cta_card text-center" href={`/event/${event?._id}/edit`}>
-            <span className=" cta_text  ">Générer les contenus de mon évènement avec Eventmaker Copilot <span aria-hidden="true">&rarr;</span></span>
+        {!event?.type_of_content ? (
+          <Link
+            className=" prompt_cta_card text-center"
+            href={`/event/${event?._id}/edit`}
+          >
+            <span className=" cta_text p-1 ">
+              Générer les contenus de mon évènement avec Eventmaker Copilot{" "}
+              <span aria-hidden="true">&rarr;</span>
+            </span>
           </Link>
+        ) : (
+          <Link
+            className=" prompt_cta_card text-center"
+            href={`/event/${event?._id}/edit`}
+          >
+            <span className=" cta_text p-1 ">
+              Modifier les informations de votre évènement{" "}
+              <span aria-hidden="true">&rarr;</span>
+            </span>
+          </Link>
+        )}
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
@@ -103,21 +119,17 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             ))}
           </dl>
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            
-            {event?.type_of_event && data.map((stat) => (
-              <div
-                key={stat.name}
-                className="flex card flex-col-reverse"
-              >
-                <dt className="text-base leading-7 text-gray-500">
-                  {stat.name}
-                </dt>
-                <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-            
+            {event?.type_of_event &&
+              data.map((stat) => (
+                <div key={stat.name} className="flex card flex-col-reverse">
+                  <dt className="text-base leading-7 text-gray-500">
+                    {stat.name}
+                  </dt>
+                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+                    {stat.value}
+                  </dd>
+                </div>
+              ))}
           </dl>
         </div>
       </div>

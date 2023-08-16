@@ -70,8 +70,10 @@ const Navbar = () => {
       </div>
       {/* Mobile navigation */}
       <div className="sm:hidden flex relative">
+        
         {session?.user ? (
-          <div className="flex">
+          <div className="flex gap-3">
+            <Link  className="black_btn" href="/dashboard">Dashboard</Link>
             <Image
               src={session?.user.image}
               width={37}
@@ -82,6 +84,7 @@ const Navbar = () => {
                 setToggleDropdown((prev) => !prev);
               }}
             />
+            
             {toggleDropdown && (
               <div className="dropdown">
                 <p>Bonjour {session?.user.name}</p>
