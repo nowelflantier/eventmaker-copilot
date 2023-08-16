@@ -7,7 +7,7 @@ import { useEvent } from "@utils/EventContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 import FormRequest from "@components/FormRequest";
 
-const RequestPage = () => {
+const NewRequestPage = () => {
   const { user } = useUser();
   const [formData, setFormData] = useState({});
   
@@ -59,4 +59,4 @@ const RequestPage = () => {
   );
 };
 
-export default RequestPage;
+export default NewRequestPage;

@@ -55,7 +55,7 @@ const EventPage = () => {
     }
   }, [user]);
   return (
-    <EventDetailledView event={eventsDetails} isEventLoaded={isEventLoaded} />
+   true // ajouter vue de toutes les requests pour plus de filtres ?
   );
 };
 

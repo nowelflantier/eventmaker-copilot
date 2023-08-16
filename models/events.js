@@ -21,6 +21,8 @@ const EventSchema = new Schema({
       type_of_content: { type: String },
       target: { type: String },
       support: { type: String },
+      topic: { type: String },
+      tone: { type: String },
     },
   ],
 });

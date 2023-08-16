@@ -1,11 +1,9 @@
-'use client'
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const FormRequest = ({ type, event, setEvent }) => {
-
-
   const router = useRouter();
   const [request, setRequest] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -78,8 +76,8 @@ const FormRequest = ({ type, event, setEvent }) => {
               <option value="" disabled hidden>
                 Choisissez une option
               </option>
-              <option value="Texte">Texte</option>
-              <option value="Structure">Structure</option>
+              <option value="Texte">Texte brut</option>
+              <option value="Structure">Structure de page ou d'email</option>
             </select>
           </label>
         )}
@@ -106,6 +104,34 @@ const FormRequest = ({ type, event, setEvent }) => {
         {request?.support && (
           <label>
             <span className="font-satoshi font-bold text-base text-gray-700">
+              Dans quel but ?
+            </span>
+            <select
+              name="topic"
+              value={request?.topic || ""}
+              onChange={handleChange}
+              required
+              className="form_input"
+            >
+              <option value="" disabled hidden>
+                Choisissez une option
+              </option>
+              <option value="Accueil">Accueil</option>
+              <option value="Invitation">Invitation</option>
+              <option value="Confirmation">Confirmation</option>
+              <option value="Modération">Modération</option>
+              <option value="Informations pratiques">
+                Informations pratiques
+              </option>
+              <option value="Programme de conférences">
+                Programme de conférences
+              </option>
+            </select>
+          </label>
+        )}
+        {request?.topic && (
+          <label>
+            <span className="font-satoshi font-bold text-base text-gray-700">
               Quelle est la cible de votre contenu ?
             </span>
             <select
@@ -118,17 +144,41 @@ const FormRequest = ({ type, event, setEvent }) => {
               <option value="" disabled hidden>
                 Choisissez une option
               </option>
-              <option value="Grand public">Grand public</option>
               <option value="Visiteurs">Visiteurs</option>
               <option value="Prospects">Prospects</option>
               <option value="Exposants">Exposants</option>
-              <option value="Organisation">Organisation</option>
-              <option value="VIP">VIP</option>
+              <option value="Prestataires">Prestataires</option>
+              <option value="VIPs">VIPs</option>
               <option value="Invités">Invités</option>
             </select>
           </label>
         )}
-
+        {request?.target && (
+          <label>
+            <span className="font-satoshi font-bold text-base text-gray-700">
+              Quel ton souhaitez vous adopter dans votre contenu ?
+            </span>
+            <select
+              name="tone"
+              value={request?.tone || ""}
+              onChange={handleChange}
+              required
+              className="form_input"
+            >
+              <option value="" disabled hidden>
+                Choisissez une option
+              </option>
+              <option value="Neutre">Neutre</option>
+              <option value="Professionnel">Professionnel</option>
+              <option value="Amical">Amical</option>
+              <option value="Excité">Excité</option>
+              <option value="Enjoué">Enjoué</option>
+              <option value="Jovial">Jovial</option>
+              <option value="Froid">Froid</option>
+            </select>
+          </label>
+        )}
+         
         <div className="flex-end mx-3 mb-5 gap-4">
           <Link href="/" className="text-gray-500 text-sm">
             Annuler

@@ -2,6 +2,8 @@ import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
 
+import EventPromptBlock from "./EventPromptBlock";
+
 const EventDetailledView = ({ event, isEventLoaded }) => {
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
@@ -32,6 +34,11 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Thématiques", value: event?.thematics },
   ];
 
+  const handleRequestClick = (requestId) => {
+    // Faites quelque chose avec requestId ici
+    console.log("ID de la demande cliquée:", requestId);
+  };
+  
   return (
     <div className="relative isolate w-11/12  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
@@ -96,7 +103,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
 
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-            <span className="blue_gradient"> Les informations de{" "}</span>
+              <span className="blue_gradient"> Les informations de </span>
               votre évènement
             </h2>
 
@@ -136,7 +143,6 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
                   <span className="orange_gradient">
-                 
                     Les contenus générés pour{" "}
                   </span>
                   votre évènement
@@ -151,19 +157,32 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   </span>
                 </Link>
                 {event?.requests &&
-              event.requests.map((request) => (
-                <div key={request._id} className="flex card flex-col-reverse">
-                  <dt className="text-base leading-7 text-gray-500">
-                    {request.type_of_content}
-                  </dt>
-                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                    {request.target}
-                  </dd>
-                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                    {request.support}
-                  </dd>
-                </div>
-              ))}
+                  event.requests.map((request) => (
+                    <Link
+                      key={request._id}
+                      className="flex text-center card flex-col"
+                      href={`/event/${event._id}/request/${request._id}`}
+                      >
+                      <dd className="text-base tracking-tight text-gray-800">
+                        Retrouvez votre{" "}
+                        <span className="text-2xl font-bold tracking-tight green_gradient">
+                          {request.type_of_content}
+                        </span>
+                      </dd>
+                      <dd className="text-base tracking-tight text-gray-800">
+                        pour votre{" "}
+                        <span className="text-2xl font-bold tracking-tight blue_gradient">
+                          {request.support}
+                        </span>
+                      </dd>
+                      <dd className="text-base tracking-tight text-gray-800">
+                        à destination de vos{" "}
+                        <span className="text-2xl font-bold tracking-tight black_gradient">
+                          {request.target}
+                        </span>
+                      </dd>
+                    </Link>
+                  ))}
               </div>
             )}
           </dl>
