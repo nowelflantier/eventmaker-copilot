@@ -28,6 +28,9 @@ const RequestDetailedView = ({ event, requestId }) => {
     //}
   }, [event]);
 
+  const aiResponse =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst quisque sagittis purus sit. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Tellus integer feugiat scelerisque varius morbi enim nunc. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Consequat ac felis donec et odio pellentesque diam volutpat commodo. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Lacinia at quis risus sed vulputate odio ut enim. Ut porttitor leo a diam. Aliquam purus sit amet luctus venenatis lectus magna fringilla. Tortor id aliquet lectus proin nibh nisl condimentum. Massa placerat duis ultricies lacus sed turpis. Nibh tortor id aliquet lectus proin nibh. Est ullamcorper eget nulla facilisi etiam dignissim diam quis. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Lobortis scelerisque fermentum dui faucibus in ornare. Orci a scelerisque purus semper. Volutpat maecenas volutpat blandit aliquam. Non diam phasellus vestibulum lorem sed risus ultricies tristique.";
+
   const links = [
     {
       name: "Modifier les détails de la requête",
@@ -73,20 +76,30 @@ const RequestDetailedView = ({ event, requestId }) => {
       </div>
       <div className="mx-auto max-w-7xl px-3 lg:px-3">
         <div className="mx-auto max-w-2xl lg:mx-0">
-        <p className="mb-4"><span className="black_gradient font-bold text-2xl">{request?.topic}</span> - {event?.title}</p>
+          <p className="mb-4">
+            <span className="black_gradient font-bold text-2xl">
+              {request?.topic}
+            </span>{" "}
+            - {event?.title}
+          </p>
           <h1 className="text-4xl font-bold tracking-tight text-black sm:text-6xl">
             Votre{" "}
-            <span className="green_gradient">{request?.type_of_content}</span>
-            {" "}à insérer dans votre{" "}
-            <span className="blue_gradient">{request?.support}</span>
-            {" "}à destination de vos{" "}
+            <span className="green_gradient">{request?.type_of_content}</span> à
+            insérer dans votre{" "}
+            <span className="blue_gradient">{request?.support}</span> à
+            destination de vos{" "}
             <span className="orange_gradient">{request?.target}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-500">
             {event?.description}
           </p>
         </div>
-
+        <div  className="flex prompt_infocard flex-col-reverse">
+          <dt className="text-base leading-7 text-gray-800">{aiResponse}</dt>
+          {/* <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800"> */}
+            {/* {aiResponse}
+          </dd> */}
+        </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
@@ -133,8 +146,6 @@ const RequestDetailedView = ({ event, requestId }) => {
                   </dd>
                 </div>
               ))}
-           
-           
           </dl>
         </div>
       </div>
