@@ -1,10 +1,12 @@
+'use client'
 import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
+import { useEffect } from "react";
 
 
 
-const EventDetailledView = ({ event, isEventLoaded }) => {
+const RequestDetailedView = ({ event, requestId }) => {
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -13,7 +15,12 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
   const formattedEndDate = end_date
     ? format(end_date, "dd/MM/yyyy", { locale: fr })
     : "N/A";
-
+  useEffect(() => {
+    console.log(event);
+  
+ 
+  }, [event])
+  
   const links = [
     {
       name: "Accéder au back office",
@@ -34,12 +41,11 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Thématiques", value: event?.thematics },
   ];
 
-  const handleRequestClick = (requestId) => {
-    // Faites quelque chose avec requestId ici
-    console.log("ID de la demande cliquée:", requestId);
-  };
+  const request = event.requests.find(req => req._id === requestId);
+
   
   return (
+
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
@@ -189,7 +195,8 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
         </div>
       </div>
     </div>
+    
   );
 };
 
-export default EventDetailledView;
+export default RequestDetailedView;

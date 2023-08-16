@@ -31,7 +31,7 @@ export const EventProvider = ({ children }) => {
 //     }
 //   }, [user]);
 
-
+  
 
   const value = { event, setEvent };
 
