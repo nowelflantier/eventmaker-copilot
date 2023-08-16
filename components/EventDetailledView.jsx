@@ -104,7 +104,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
           </dl>
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             
-            {data.map((stat) => (
+            {event?.type_of_event && data.map((stat) => (
               <div
                 key={stat.name}
                 className="flex card flex-col-reverse"
