@@ -9,7 +9,7 @@ export const GET = async (req, { params }) => {
     if (!event) return new Response("event not found", { status: 404 });
     return new Response(JSON.stringify(event), { status: 200 });
   } catch (error) {
-    return false;
+    return new Response("Failed to fetch event from database", { status: 500 });
   }
 };
 

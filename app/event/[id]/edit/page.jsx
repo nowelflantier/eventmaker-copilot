@@ -13,6 +13,7 @@ const EditEventPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const { event, setEvent } = useEvent();
   const { data: session } = useSession();
+  const [eventDetailsToStore, setEventDetailsToStore] = useState({})
   const router = useRouter();
   const params = useParams();
   const eventId = params.id;
@@ -24,20 +25,14 @@ const EditEventPage = () => {
       token,
       eventId,
     });
-    const eventDetailsToStore = {
-      title: fetchedEventDetails.title,
-      _id: fetchedEventDetails._id,
-      start_date: fetchedEventDetails.start_date,
-      end_date: fetchedEventDetails.end_date,
-      website_domain_name: fetchedEventDetails.website_domain_name,
-      // Ajoutez ici d'autres propriétés si nécessaire
-    };
-    setEvent(eventDetailsToStore);
+    console.log(fetchedEventDetails);
+    setEvent(fetchedEventDetails);
   };
+
   useEffect(() => {
-    console.log(eventId);
+    console.log(event);
     {
-      user && fetchEventDetails();
+       user && fetchEventDetails();
     }
   }, [user]);
 

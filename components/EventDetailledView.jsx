@@ -26,6 +26,12 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Date de début", value: formattedStartDate },
     { name: "Date de fin", value: formattedEndDate },
   ];
+  const data = 
+  [
+    { name: "Type d'évènement", value: event?.type_of_event },
+    { name: "Type de contenu", value: event?.type_of_content },
+    { name: "Thématiques", value: event?.thematics },
+  ];
 
   return (
     <div className="relative isolate w-11/12  glassmorphism overflow-hidden bg-gray-900 py-24 sm:py-32">
@@ -95,6 +101,23 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                 </dd>
               </div>
             ))}
+          </dl>
+          <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
+            
+            {data.map((stat) => (
+              <div
+                key={stat.name}
+                className="flex card flex-col-reverse"
+              >
+                <dt className="text-base leading-7 text-gray-500">
+                  {stat.name}
+                </dt>
+                <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+                  {stat.value}
+                </dd>
+              </div>
+            ))}
+            
           </dl>
         </div>
       </div>
