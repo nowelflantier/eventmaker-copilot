@@ -50,3 +50,4 @@ export const PATCH = async (req, { params }) => {
     return new Response("Failed to update event", { status: 500 });
   }
 };
+

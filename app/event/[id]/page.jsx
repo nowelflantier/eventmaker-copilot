@@ -29,7 +29,6 @@ const EventPage = () => {
       },
     });
     const fetchedUser = await fetchedUserResponse.json();
-    console.log(fetchedEventDetails);
     setEventsDetails(fetchedEventDetails);
     setIsEventLoaded(true);
     const eventDetailsToStore = {

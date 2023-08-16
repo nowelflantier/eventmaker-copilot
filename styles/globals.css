@@ -160,7 +160,7 @@
 }
 
 .prompt_cta_card {
-  @apply w-full mx-auto rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+  @apply  w-screen sm:mx-28 h-auto mt-3 rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
 }
 
 /* Classe de carte commune */
@@ -170,7 +170,7 @@
 
 /* Conteneur de cartes */
 .card_container {
-  @apply flex flex-wrap justify-center gap-4; /* Utilisation de Flexbox */
+  @apply flex flex-wrap mt-4 w-full justify-center gap-4; /* Utilisation de Flexbox */
 }
 
 /* Classe de nouvelle carte */

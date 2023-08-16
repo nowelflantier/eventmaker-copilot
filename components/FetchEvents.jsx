@@ -21,7 +21,9 @@ export async function fetchEventsDetailsFromServer({ token, eventId }) {
   await connectToBD();
 
   // Vérifier si l'événement existe dans votre base de données
-  let existingEvent = await Event.findById(eventId).lean();
+  let existingEvent = await Event.findById(eventId);
+
+  existingEvent = JSON.parse(JSON.stringify(existingEvent));
 
   if (existingEvent) {
     // Si le titre est différent, mettre à jour le titre dans votre base de données

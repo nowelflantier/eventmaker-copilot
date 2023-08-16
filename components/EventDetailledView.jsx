@@ -33,7 +33,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
   ];
 
   return (
-    <div className="relative isolate w-11/12  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-32">
+    <div className="relative isolate w-11/12  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -95,21 +95,18 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
           </dl>
 
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-6xl">
-              Les informations de <span className="green_gradient">
-                 votre évènement
-              </span>
-           
+            <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
+            <span className="blue_gradient"> Les informations de{" "}</span>
+              votre évènement
             </h2>
-      
+
             {!event?.type_of_event ? (
               <Link
                 className=" prompt_cta_card text-center"
                 href={`/event/${event?._id}/edit`}
               >
                 <span className=" cta_text p-1 ">
-                  Ajouter les informations de mon évènement
-                {" "}
+                  Ajouter les informations de mon évènement{" "}
                   <span aria-hidden="true">&rarr;</span>
                 </span>
               </Link>
@@ -135,6 +132,40 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   </dd>
                 </div>
               ))}
+            {event?.type_of_event && (
+              <div className="card_container">
+                <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
+                  <span className="orange_gradient">
+                 
+                    Les contenus générés pour{" "}
+                  </span>
+                  votre évènement
+                </h3>
+                <Link
+                  className=" prompt_cta_card text-center"
+                  href={`/event/${event?._id}/request/new`}
+                >
+                  <span className=" cta_text p-1 ">
+                    Générer du contenu pour mon évènement{" "}
+                    <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Link>
+                {event?.requests &&
+              event.requests.map((request) => (
+                <div key={request._id} className="flex card flex-col-reverse">
+                  <dt className="text-base leading-7 text-gray-500">
+                    {request.type_of_content}
+                  </dt>
+                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+                    {request.target}
+                  </dd>
+                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+                    {request.support}
+                  </dd>
+                </div>
+              ))}
+              </div>
+            )}
           </dl>
         </div>
       </div>
