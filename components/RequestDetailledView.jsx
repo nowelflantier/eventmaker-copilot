@@ -1,12 +1,12 @@
-'use client'
+"use client";
 import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
-import { useEffect } from "react";
-
-
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const RequestDetailedView = ({ event, requestId }) => {
+  const router = useRouter();
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -15,37 +15,37 @@ const RequestDetailedView = ({ event, requestId }) => {
   const formattedEndDate = end_date
     ? format(end_date, "dd/MM/yyyy", { locale: fr })
     : "N/A";
+
+  const [request, setRequest] = useState();
   useEffect(() => {
     console.log(event);
-  
- 
-  }, [event])
-  
+    // if (event.request) {
+    setRequest(event?.requests?.find((req) => req._id === requestId));
+    // } else if (event){
+    //   router.push(`/event/${event?._id}`);
+    // } else {
+    //   router.push(`/dashboard`)
+    //}
+  }, [event]);
+
   const links = [
     {
-      name: "Accéder au back office",
-      href: `https://app.eventmaker.io/?locale=fr&redirected_event_id=${event?._id}`,
+      name: "Modifier les détails de la requête",
+      href: `#`,
     },
     {
-      name: "Accéder au site de l'évènement",
-      href: `https://${event?.website_domain_name}`,
+      name: "Re-générer le contenu",
+      href: `#`,
     },
   ];
-  const stats = [
-    { name: "Date de début", value: formattedStartDate },
-    { name: "Date de fin", value: formattedEndDate },
-  ];
+
   const data = [
     { name: "Type d'évènement", value: event?.type_of_event },
     { name: "Public", value: event?.public_type },
     { name: "Thématiques", value: event?.thematics },
   ];
 
-  const request = event.requests.find(req => req._id === requestId);
-
-  
   return (
-
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
@@ -73,10 +73,14 @@ const RequestDetailedView = ({ event, requestId }) => {
       </div>
       <div className="mx-auto max-w-7xl px-3 lg:px-3">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            <span className="green_gradient">{event?.title} </span>
-            <br />
-            <span className="black_gradient text-2xl">{event?.organizer}</span>
+        <p className="mb-4"><span className="black_gradient font-bold text-2xl">{request?.topic}</span> - {event?.title}</p>
+          <h1 className="text-4xl font-bold tracking-tight text-black sm:text-6xl">
+            Votre{" "}
+            <span className="green_gradient">{request?.type_of_content}</span>
+            {" "}à insérer dans votre{" "}
+            <span className="blue_gradient">{request?.support}</span>
+            {" "}à destination de vos{" "}
+            <span className="orange_gradient">{request?.target}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-500">
             {event?.description}
@@ -91,22 +95,6 @@ const RequestDetailedView = ({ event, requestId }) => {
               </a>
             ))}
           </div>
-          <dl className="mt-6 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => (
-              <div
-                key={stat.name}
-                className="flex prompt_infocard flex-col-reverse"
-              >
-                <dt className="text-base leading-7 text-gray-500">
-                  {stat.name}
-                </dt>
-                <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
               <span className="blue_gradient"> Les informations de </span>
@@ -145,57 +133,12 @@ const RequestDetailedView = ({ event, requestId }) => {
                   </dd>
                 </div>
               ))}
-            {event?.type_of_event && (
-              <div className="card_container">
-                <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  <span className="orange_gradient">
-                    Les contenus générés pour{" "}
-                  </span>
-                  votre évènement
-                </h3>
-                <Link
-                  className=" prompt_cta_card text-center"
-                  href={`/event/${event?._id}/request/new`}
-                >
-                  <span className=" cta_text p-1 ">
-                    Générer du contenu pour mon évènement{" "}
-                    <span aria-hidden="true">&rarr;</span>
-                  </span>
-                </Link>
-                {event?.requests &&
-                  event.requests.map((request) => (
-                    <Link
-                      key={request._id}
-                      className="flex text-center card flex-col"
-                      href={`/event/${event._id}/request/${request._id}`}
-                      >
-                      <dd className="text-base tracking-tight text-gray-800">
-                        Retrouvez votre{" "}
-                        <span className="text-2xl font-bold tracking-tight green_gradient">
-                          {request.type_of_content}
-                        </span>
-                      </dd>
-                      <dd className="text-base tracking-tight text-gray-800">
-                        pour votre{" "}
-                        <span className="text-2xl font-bold tracking-tight blue_gradient">
-                          {request.support}
-                        </span>
-                      </dd>
-                      <dd className="text-base tracking-tight text-gray-800">
-                        à destination de vos{" "}
-                        <span className="text-2xl font-bold tracking-tight black_gradient">
-                          {request.target}
-                        </span>
-                      </dd>
-                    </Link>
-                  ))}
-              </div>
-            )}
+           
+           
           </dl>
         </div>
       </div>
     </div>
-    
   );
 };
 
