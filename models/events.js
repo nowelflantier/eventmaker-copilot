@@ -13,7 +13,7 @@ const EventSchema = new Schema({
   
   requests: [
     {
-      _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
+      _id: { type: Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
       type_of_content: {type: String},
       target:  {type: String},
       support:  {type: String},
