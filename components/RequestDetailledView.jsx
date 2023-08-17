@@ -4,11 +4,12 @@ import { fr } from "date-fns/locale";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { callOpenAI } from "@utils/openaiContext";
 
 const RequestDetailedView = ({ event, requestId }) => {
   const router = useRouter();
-  const params = useParams()
-  const eventId = params.id
+  const params = useParams();
+  const eventId = params.id;
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -19,19 +20,47 @@ const RequestDetailedView = ({ event, requestId }) => {
     : "N/A";
 
   const [request, setRequest] = useState();
+  const [prompt, setPrompt] = useState()
+  const [content, setContent] = useState()
   useEffect(() => {
-    // console.log(event);
-    // if (event.request) {
     setRequest(event?.requests?.find((req) => req._id === requestId));
-    // } else if (event){
-    //   router.push(`/event/${event?._id}`);
-    // } else {
-    //   router.push(`/dashboard`)
-    //}
+    
+    
   }, [event]);
 
-  const aiResponse =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst quisque sagittis purus sit. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Tellus integer feugiat scelerisque varius morbi enim nunc. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Consequat ac felis donec et odio pellentesque diam volutpat commodo. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Lacinia at quis risus sed vulputate odio ut enim. Ut porttitor leo a diam. Aliquam purus sit amet luctus venenatis lectus magna fringilla. Tortor id aliquet lectus proin nibh nisl condimentum. Massa placerat duis ultricies lacus sed turpis. Nibh tortor id aliquet lectus proin nibh. Est ullamcorper eget nulla facilisi etiam dignissim diam quis. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Lobortis scelerisque fermentum dui faucibus in ornare. Orci a scelerisque purus semper. Volutpat maecenas volutpat blandit aliquam. Non diam phasellus vestibulum lorem sed risus ultricies tristique.";
+  useEffect(() => {
+    setPrompt(request?.generatedPrompt)
+  
+  
+  }, [request])
+
+  // useEffect(() => {
+  //   const fetchContent = async () => {
+  //     if (!request?.generatedContent && prompt) {
+  //       const responseContent = await callOpenAI(prompt);
+  //       setContent(responseContent);
+  //     }
+  //   };
+
+  //   fetchContent();
+  // }, [prompt, request]);
+  
+  const fetchContent = async () => {
+    if (!request?.generatedContent && prompt) {
+      const responseContent = await callOpenAI(prompt);
+      setContent(responseContent);
+    }
+  };
+  useEffect(() => {
+    console.log(content);
+  
+
+  }, [content])
+  
+  
+
+  const aiResponse = request?.generatedContent;
+  // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst quisque sagittis purus sit. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Tellus integer feugiat scelerisque varius morbi enim nunc. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Consequat ac felis donec et odio pellentesque diam volutpat commodo. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Lacinia at quis risus sed vulputate odio ut enim. Ut porttitor leo a diam. Aliquam purus sit amet luctus venenatis lectus magna fringilla. Tortor id aliquet lectus proin nibh nisl condimentum. Massa placerat duis ultricies lacus sed turpis. Nibh tortor id aliquet lectus proin nibh. Est ullamcorper eget nulla facilisi etiam dignissim diam quis. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Lobortis scelerisque fermentum dui faucibus in ornare. Orci a scelerisque purus semper. Volutpat maecenas volutpat blandit aliquam. Non diam phasellus vestibulum lorem sed risus ultricies tristique.";
 
   const links = [
     {
@@ -45,7 +74,7 @@ const RequestDetailedView = ({ event, requestId }) => {
     {
       name: "Retour à la page de l'évènement",
       href: `/event/${eventId}`,
-    }
+    },
   ];
 
   const data = [
@@ -100,16 +129,18 @@ const RequestDetailedView = ({ event, requestId }) => {
             {event?.description}
           </p>
         </div>
-        <div  className="flex prompt_infocard flex-col-reverse">
+        <div className="flex prompt_infocard flex-col-reverse">
           <dt className="text-base leading-7 text-gray-800">{aiResponse}</dt>
           {/* <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800"> */}
-            {/* {aiResponse}
+          {/* {aiResponse}
           </dd> */}
         </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
+      
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
+           
             {links.map((link) => (
-              <Link key={link.name} href={link.href} >
+              <Link key={link.name} href={link.href}>
                 {link.name} <span aria-hidden="true">&rarr;</span>
               </Link>
             ))}

@@ -49,55 +49,12 @@ const EditRequestPage = () => {
       user && fetchEventDetails();
     }
   }, [user]);
-  // useEffect(() => {
-  //   console.log(request);
+  useEffect(() => {
+    console.log(request);
   
   
-  // }, [request])
+  }, [request])
   
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      // Vérifier si l'événement existe
-      const checkResponse = await fetch(`/api/events/${eventId}`, {
-        method: "GET",
-      });
-
-      let response;
-      if (checkResponse.ok) {
-        console.log("rep ok", event);
-        // Si l'événement existe, mettre à jour
-        response = await fetch(`/api/events/${eventId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(event),
-        });
-      } else {
-      
-        console.log("rep new");
-        // Si l'événement n'existe pas, créer
-        response = await fetch(`/api/events/${eventId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(event),
-        });
-      }
-
-      if (response.ok) {
-        // Rediriger vers la page de l'événement ou une autre page si l'événement est créé/mis à jour avec succès
-        router.push(`/event/${eventId}`);
-        console.log(event);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la création de l'événement:", error);
-  return new Response("Failed to create event", { status: 500 });
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <section className="w-full">

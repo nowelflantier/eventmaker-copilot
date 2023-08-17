@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEvent } from "@utils/EventContext";
+import { callOpenAI } from "@utils/openaiContext";
 
 const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   const router = useRouter();
@@ -22,9 +23,9 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   useEffect(() => {
     // console.log(request);
   }, [request]);
-useEffect(()=>{
-  // console.log(event);
-},[event])
+  useEffect(() => {
+    // console.log(event);
+  }, [event]);
   const handleSubmit = async (e) => {
     console.log("État initial de event.requests:", event.requests);
 
@@ -33,6 +34,21 @@ useEffect(()=>{
     // Créer une copie du tableau requests
     const newRequests = event.requests ? [...event.requests] : [];
     console.log("newRequests avant la mise à jour:", newRequests);
+
+    // Concaténer les valeurs des champs souhaités
+    const generatedPrompt = `Le/la ${event.type_of_event} intitulé "${event.title}" organisé par ${event.organizer} est un évènement à destination d'un public ${event.public_type} et qui aura lieu du ${event.start_date} au ${event.end_date}. Ses thématiques principales sont : ${event.thematics}. Je veux générer un/une ${request.type_of_content} pour mon ${request.support} dont l'objet est "${request.topic} " et qui est destiné aux ${request.target} avec un ton ${request.tone}.`;
+
+    const generateContent = async () => {
+      const generatedContent = await callOpenAI(generatedPrompt);
+      // setContent(responseContent);
+      return generatedContent; // Retournez la valeur générée
+
+    };
+
+    // Ajouter le champ concaténé à l'objet request
+    request.generatedPrompt = generatedPrompt;
+    request.generatedContent = await generateContent();
+
     if (requestId) {
       console.log(request);
       // Mode édition : trouver et mettre à jour la demande existante
