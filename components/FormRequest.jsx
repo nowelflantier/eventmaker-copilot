@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEvent } from "@utils/EventContext";
 import { callOpenAI } from "@utils/openaiContext";
 import LoadingScreen from "./LoadingScreen";
+
+
 export const config = {
   runtime: "edge",
 };
@@ -22,6 +24,14 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
     ? `/event/${eventId}/request/${requestId}`
     : `/event/${eventId}`;
   const [submitting, setSubmitting] = useState(false);
+
+  const generateContent = async (generatedPrompt) => {
+    const generatedContent = await callOpenAI(generatedPrompt);
+    // setContent(responseContent);
+    return generatedContent.content; // Retournez la valeur générée
+
+  };
+
   useEffect(() => {
     setRequest(currentRequest);
   }, [currentRequest]);
@@ -43,16 +53,11 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
     // Concaténer les valeurs des champs souhaités
     const generatedPrompt = `Le/la ${event.type_of_event} intitulé "${event.title}" organisé par ${event.organizer} est un évènement à destination d'un public ${event.public_type} et qui aura lieu du ${event.start_date} au ${event.end_date}. Ses thématiques principales sont : ${event.thematics}. Je veux générer un/une ${request.type_of_content} pour mon ${request.support} dont l'objet est "${request.topic} " et qui est destiné aux ${request.target} avec un ton ${request.tone}.`;
 
-    const generateContent = async () => {
-      const generatedContent = await callOpenAI(generatedPrompt);
-      // setContent(responseContent);
-      return generatedContent.content; // Retournez la valeur générée
 
-    };
 
     // Ajouter le champ concaténé à l'objet request
     request.generatedPrompt = generatedPrompt;
-    request.generatedContent = await generateContent();
+    request.generatedContent = await generateContent(generatedPrompt);
 
     if (requestId) {
       console.log(request);
@@ -116,6 +121,8 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
 
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
+            <Suspense fallback={<LoadingScreen />}>
+
        {submitting ? (
       <LoadingScreen data={request?.generatedContent} />
     ) : (
@@ -254,6 +261,8 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
           </button>
         </div>
       </form>)}
+      </Suspense>
+
     </section>
   );
 };
