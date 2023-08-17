@@ -5,10 +5,13 @@ import { useRouter, useParams } from "next/navigation";
 import { useEvent } from "@utils/EventContext";
 import { callOpenAI } from "@utils/openaiContext";
 import LoadingScreen from "./LoadingScreen";
-
+export const config = {
+  runtime: "edge",
+};
 
 const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   const router = useRouter();
+  
   // console.log(currentRequest);
   // const [newRequest, setNewRequest] = useState(request)
   const [request, setRequest] = useState();
@@ -43,7 +46,7 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
     const generateContent = async () => {
       const generatedContent = await callOpenAI(generatedPrompt);
       // setContent(responseContent);
-      return generatedContent; // Retournez la valeur générée
+      return generatedContent.content; // Retournez la valeur générée
 
     };
 
@@ -113,8 +116,8 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
 
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
-       {submitting ? (
-      <LoadingScreen />
+       {!submitting ? (
+      <LoadingScreen data={request?.generatedContent} />
     ) : (
       <form
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"

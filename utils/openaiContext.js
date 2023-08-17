@@ -28,16 +28,19 @@ export const callOpenAI = async (text) => {
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
+        
 
-    // stream: true,
+    stream: true,
   });
   let responseContent = '';
-  // for await (const chunk of completion) {
+  for await (const chunk of completion) {
     //console.log("OpenAI Complete Response:", chunk); // Log the complete response
-    responseContent = completion.choices[0].message.content;
- // }
+    // responseContent = completion.choices[0].message.content;
+    responseContent += chunk.choices[0].delta.content
+    console.log(responseContent);
+ }
 
-  return responseContent;
+ return { success: true, content: responseContent };
 };
 
 // // Créez une fonction pour appeler l'API
