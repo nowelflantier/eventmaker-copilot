@@ -14,7 +14,7 @@ const EventSchema = new Schema({
   requests: [
     {
       // _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId(), unique: [true, "Email déjà existant !"], },
-      _id: {
+      req_id: {
         type: mongoose.Schema.Types.ObjectId,
       },
       type_of_content: { type: String },
