@@ -27,7 +27,7 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   }, [request]);
   useEffect(() => {
     // console.log(event);
-  }, [event]);
+  }, [event]); 
   const handleSubmit = async (e) => {
     console.log("État initial de event.requests:", event.requests);
 
