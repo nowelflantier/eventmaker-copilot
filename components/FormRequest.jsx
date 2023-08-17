@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEvent } from "@utils/EventContext";
 import { callOpenAI } from "@utils/openaiContext";
+import LoadingScreen from "./LoadingScreen";
+
 
 const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   const router = useRouter();
@@ -111,6 +113,9 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
 
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
+       {submitting ? (
+      <LoadingScreen />
+    ) : (
       <form
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
         onSubmit={handleSubmit}
@@ -245,7 +250,7 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
             {submitting ? `${type}...` : type}
           </button>
         </div>
-      </form>
+      </form>)}
     </section>
   );
 };
