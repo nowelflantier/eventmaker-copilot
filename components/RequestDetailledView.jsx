@@ -2,11 +2,13 @@
 import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const RequestDetailedView = ({ event, requestId }) => {
   const router = useRouter();
+  const params = useParams()
+  const eventId = params.id
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -18,7 +20,7 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   const [request, setRequest] = useState();
   useEffect(() => {
-    console.log(event);
+    // console.log(event);
     // if (event.request) {
     setRequest(event?.requests?.find((req) => req._id === requestId));
     // } else if (event){
@@ -34,12 +36,16 @@ const RequestDetailedView = ({ event, requestId }) => {
   const links = [
     {
       name: "Modifier les détails de la requête",
-      href: `#`,
+      href: `/event/${eventId}/request/${requestId}/edit`,
     },
     {
       name: "Re-générer le contenu",
       href: `#`,
     },
+    {
+      name: "Retour à la page de l'évènement",
+      href: `/event/${eventId}`,
+    }
   ];
 
   const data = [
@@ -103,12 +109,12 @@ const RequestDetailedView = ({ event, requestId }) => {
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
-              <a key={link.name} href={link.href} target="_blank">
+              <Link key={link.name} href={link.href} >
                 {link.name} <span aria-hidden="true">&rarr;</span>
-              </a>
+              </Link>
             ))}
           </div>
-          <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
+          {/* <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
               <span className="blue_gradient"> Les informations de </span>
               votre évènement
@@ -146,7 +152,16 @@ const RequestDetailedView = ({ event, requestId }) => {
                   </dd>
                 </div>
               ))}
-          </dl>
+               <Link
+                className=" prompt_cta_card text-center"
+                href={`/event/${event?._id}`}
+              >
+                <span className=" cta_text p-1 ">
+                  Retour à la page de mon évènement{" "}
+                  <span aria-hidden="true">&rarr;</span>
+                </span>
+              </Link>
+          </dl> */}
         </div>
       </div>
     </div>

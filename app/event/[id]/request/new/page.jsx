@@ -13,7 +13,7 @@ const NewRequestPage = () => {
   
   const { event, setEvent } = useEvent();
   const { data: session } = useSession();
-  const [eventDetailsToStore, setEventDetailsToStore] = useState({});
+  // const [eventDetailsToStore, setEventDetailsToStore] = useState({});
   const router = useRouter();
   const params = useParams();
   const eventId = params.id;

@@ -1,43 +1,81 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useEvent } from "@utils/EventContext";
 
-const FormRequest = ({ type, event, setEvent }) => {
+const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   const router = useRouter();
-  const [request, setRequest] = useState({});
+  // console.log(currentRequest);
+  // const [newRequest, setNewRequest] = useState(request)
+  const [request, setRequest] = useState();
+  const params = useParams();
+  const eventId = params.id;
+  const requestId = params.req_id;
+  const cancel_link = requestId
+    ? `/event/${eventId}/request/${requestId}`
+    : `/event/${eventId}`;
   const [submitting, setSubmitting] = useState(false);
-
+  useEffect(() => {
+    setRequest(currentRequest);
+  }, [currentRequest]);
+  useEffect(() => {
+    // console.log(request);
+  }, [request]);
+useEffect(()=>{
+  // console.log(event);
+},[event])
   const handleSubmit = async (e) => {
+    console.log("État initial de event.requests:", event.requests);
+
     e.preventDefault();
     setSubmitting(true);
     // Créer une copie du tableau requests
     const newRequests = event.requests ? [...event.requests] : [];
-    // Ajouter l'objet request au tableau requests
-    newRequests.push(request);
+    console.log("newRequests avant la mise à jour:", newRequests);
+    if (requestId) {
+      console.log(request);
+      // Mode édition : trouver et mettre à jour la demande existante
+      const index = newRequests.findIndex((req) => req._id === requestId);
+      console.log("Index de la requête à mettre à jour:", index);
+      newRequests[index] = request;
+    } else {
+      console.log(request);
+      // Mode création : ajouter la nouvelle demande
+      newRequests.push(request);
+    }
+    console.log("newRequests après la mise à jour:", newRequests);
 
     // Créez une copie de l'objet event avec les nouvelles requêtes
     const updatedEvent = {
       ...event,
       requests: newRequests,
     };
-
+    console.log(updatedEvent);
     // Mettez à jour l'état global avec updatedEvent
     await setEvent(updatedEvent);
 
     try {
-      const response = await fetch(`/api/events/${event._id}`, {
+      const response = await fetch(`/api/events/${eventId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedEvent),
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
+
       if (response.ok) {
         setRequest({});
-        // Rediriger vers la page de l'événement ou une autre page si l'événement est créé/mis à jour avec succès
-        router.push(`/event/${event._id}`);
-        console.log(event);
+        let redirectRequestId;
+        if (requestId) {
+          // En mode édition, utilisez l'ID de la requête que vous venez de mettre à jour
+          redirectRequestId = requestId;
+        } else {
+          // En mode création, utilisez l'ID de la dernière requête dans le tableau
+          const lastRequest = data.requests?.[data.requests.length - 1];
+          redirectRequestId = lastRequest?._id;
+        }
+        router.push(`/event/${eventId}/request/${redirectRequestId}`);
       }
     } catch (error) {
       console.log(error.message);
@@ -52,7 +90,7 @@ const FormRequest = ({ type, event, setEvent }) => {
       ...prevRequest,
       [name]: value,
     }));
-    // console.log(request);
+    // jusqu'ici ok, le useEffect ressort la request modifiée
   };
 
   return (
@@ -178,9 +216,9 @@ const FormRequest = ({ type, event, setEvent }) => {
             </select>
           </label>
         )}
-         
+
         <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/" className="text-gray-500 text-sm">
+          <Link href={cancel_link} className="text-gray-500 text-sm">
             Annuler
           </Link>
           <button

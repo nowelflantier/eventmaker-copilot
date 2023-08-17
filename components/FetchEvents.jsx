@@ -32,14 +32,34 @@ export async function fetchEventsDetailsFromServer({ token, eventId }) {
     existingEvent.organizer = eventsDetailsFromEventmaker.organizer;
     existingEvent.start_date = eventsDetailsFromEventmaker.start_date;
     existingEvent.end_date = eventsDetailsFromEventmaker.end_date;
-    
-    
+
     await Event.findByIdAndUpdate(eventId, existingEvent);
-  } else {
-    // Si l'événement n'existe pas dans votre base de données, vous pouvez le créer ici si nécessaire
-    // ...
   }
 
   // Retourner l'objet avec les informations à jour
   return existingEvent ? existingEvent : eventsDetailsFromEventmaker;
+}
+export async function fetchRequestDetailsFromServer({ eventId, requestId }) {
+  // Connecter à la base de données
+  await connectToBD();
+  // Vérifier si l'événement existe dans votre base de données
+  let existingEvent = await Event.findById(eventId);
+
+  existingEvent = JSON.parse(JSON.stringify(existingEvent));
+  if (!existingEvent) {
+    // Gérer l'erreur si l'événement n'existe pas
+    return new Error("Event not found");
+  }
+
+  // Trouver la demande correspondante dans l'événement
+  const request = existingEvent.requests.find(
+    (req) => req._id.toString() === requestId
+  );
+
+  if (!request) {
+    // Gérer l'erreur si la demande n'existe pas
+    return new Error('Request not found');
+  }
+
+  return request;
 }
