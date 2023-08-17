@@ -116,7 +116,7 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
 
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
-       {!submitting ? (
+       {submitting ? (
       <LoadingScreen data={request?.generatedContent} />
     ) : (
       <form
