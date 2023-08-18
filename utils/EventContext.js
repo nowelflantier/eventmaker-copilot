@@ -24,6 +24,7 @@ export const EventProvider = ({ children }) => {
 //   const { data: session } = useSession();
   const [event, setEvent] = useState();
   const [request, setRequest] = useState()
+  const [generatedContent, setGeneratedContent] = useState()
   
 //   const {user, currentEventId } = useUser();
 
@@ -35,7 +36,7 @@ export const EventProvider = ({ children }) => {
 
   
 
-  const value = { event, setEvent, request, setRequest };
+  const value = { event, setEvent,generatedContent, setGeneratedContent, request, setRequest };
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

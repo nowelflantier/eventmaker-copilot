@@ -51,11 +51,11 @@ const RequestDetailedView = ({ event, requestId }) => {
       setContent(responseContent);
     }
   };
-  useEffect(() => {
-    console.log(content);
+  // useEffect(() => {
+  //   console.log(content);
   
 
-  }, [content])
+  // }, [content])
   
   
 

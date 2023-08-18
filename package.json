@@ -15,6 +15,7 @@
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "encoding": "^0.1.13",
+    "eventsource-parser": "^1.0.0",
     "mongodb": "^5.7.0",
     "mongodb-client-encryption": "^2.9.0",
     "mongoose": "^7.4.2",
