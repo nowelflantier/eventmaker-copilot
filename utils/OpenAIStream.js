@@ -3,7 +3,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
-export async function OpenAIStream(payload) {
+export const OpenAIStream = async (payload) => {
     // const {setGeneratedContent} = useEvent()
   try {
     const completion = await openai.chat.completions.create(payload);
