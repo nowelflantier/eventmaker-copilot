@@ -2,7 +2,7 @@
 import React, { createContext, useEffect, useContext, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useUser } from "./UserContext";
-
+ 
 const EventContext = createContext();
 
 export const useEvent = () => {
