@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 import FormRequest from "@components/FormRequest";
+import FormRequest2 from "@components/FormRequest2";
 
 const NewRequestPage = () => {
   const { user } = useUser();
@@ -50,7 +51,7 @@ const NewRequestPage = () => {
         Donnez nous quelques détails sur le contenu que vous souhaitez générer
         grâce à Eventmaker Copilot.
       </p>
-      <FormRequest
+      <FormRequest2
         type="Générer mon contenu !"
         event={event}
         setEvent={setEvent}

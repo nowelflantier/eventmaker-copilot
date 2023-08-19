@@ -5,7 +5,7 @@ import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
-import RequestDetailedView from "@components/RequestDetailledView";
+import RequestDetailedView2 from "@components/RequestDetailledView2";
 
 const RequestPage = () => {
   const { user, setCurrentEventId } = useUser();
@@ -50,7 +50,8 @@ const RequestPage = () => {
   }, [user]);
 
   return (
-    <RequestDetailedView requestId={requestId} event={event} />
+    <RequestDetailedView2 requestId={requestId} event={event} />
+    // <RequestDetailedView requestId={requestId} event={event} />
   )
 }
 

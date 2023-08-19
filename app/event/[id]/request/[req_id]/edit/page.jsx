@@ -4,7 +4,7 @@ import { useUser } from "@utils/UserContext";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
-import FormRequest from "@components/FormRequest";
+import FormRequest2 from "@components/FormRequest2";
 import { fetchEventsDetailsFromServer, fetchRequestDetailsFromServer } from "@components/FetchEvents";
 
 const EditRequestPage = () => {
@@ -49,11 +49,11 @@ const EditRequestPage = () => {
       user && fetchEventDetails();
     }
   }, [user]);
-  useEffect(() => {
-    console.log(request);
+  // useEffect(() => {
+  //   console.log(request);
   
   
-  }, [request])
+  // }, [request])
   
 
   return (
@@ -66,11 +66,13 @@ const EditRequestPage = () => {
       Donnez nous quelques détails sur le contenu que vous souhaitez générer
         grâce à Eventmaker Copilot.
       </p>
-      <FormRequest
+      <FormRequest2
         type="Mettre à jour"
         event={event}
         submitting={submitting}
         currentRequest={request}
+        request={request}
+        setRequest={setRequest}
         setEvent={setEvent}
       />
     </section>
