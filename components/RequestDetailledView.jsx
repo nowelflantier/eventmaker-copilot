@@ -73,11 +73,7 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
-             <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
+   
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -124,6 +120,11 @@ const RequestDetailedView = ({ event, requestId }) => {
         </div>
         <div className="flex prompt_infocard flex-col-reverse">
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+              <Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{ duration: 2000 }}
+        />
                 <div
                   className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                   onClick={() => {
@@ -134,7 +135,8 @@ const RequestDetailedView = ({ event, requestId }) => {
                   }}
                   key={request?.generatedContent}
                 >
-                  <p>{request?.generatedContent}</p>
+                         
+                  <p>  {request?.generatedContent}</p>
                 </div>
               </div>
             

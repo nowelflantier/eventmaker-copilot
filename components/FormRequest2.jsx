@@ -62,7 +62,7 @@ const FormRequest2 = ({
       ...prevRequest,
       [name]: value,
     }));
-  
+
     // setRequest({ ...request, generatedPrompt: concatPrompt }); // Mise à jour de l'état de la requête avec concatPrompt
     console.log("handleChange - name:", name, "value:", value);
 
@@ -92,7 +92,7 @@ const FormRequest2 = ({
 
   const onSubmit = async (updatedEvent) => {
     // e.preventDefault()
-console.log(updatedEvent);
+    console.log(updatedEvent);
     try {
       const response = await fetch(`/api/events/${eventId}`, {
         method: "PATCH",
@@ -104,12 +104,17 @@ console.log(updatedEvent);
 
       if (response.ok) {
         setRequest({});
+        // Récupérez l'ID de la dernière requête dans le tableau des requêtes
+        const lastRequest = data.requests?.[data.requests.length - 1];
+        const newRequestId = lastRequest?._id;
+        setTimeout(() => {
+          router.push(`/event/${eventId}/request/${newRequestId}`);
+        }, 2500);
       }
     } catch (error) {
       console.log(error.message);
     }
   };
-
 
   useEffect(() => {
     // Définir l'état initial des champs de formulaire en fonction de `request`
@@ -131,45 +136,38 @@ console.log(updatedEvent);
       `Le/la ${event?.type_of_event} intitulé "${event?.title}" organisé par ${event?.organizer} est un évènement à destination d'un public ${public_type} et qui aura lieu du ${event?.start_date} au ${event?.end_date}. Ses thématiques principales sont : ${event?.thematics}. Je veux générer un/une ${type_of_content} pour mon ${support} dont l'objet est "${topic} " et qui est destiné aux ${target} avec un ton ${tone}.`
     );
   }, [type_of_content, support, topic, target, tone]); // Dépendances de l'effet
- 
- 
- useEffect(() => {
-   if (!isLoading && generatedContent) {
-    
-    const newRequests = event.requests ? [...event.requests] : [];
-    console.log("new request useeffect", newRequests);
-    const updatedRequest = {
-      ...request,
-      // generatedContent: generatedContent,
-      generatedContent: generatedContent,
-      isContentGenerated: true,
-    };
-     // Trouver et mettre à jour la demande existante ou ajouter la nouvelle demande
 
-     if (requestId) {
-      const index = newRequests.findIndex((req) => req._id === requestId);
-      newRequests[index] = updatedRequest;
-    } else {
-      newRequests.push(updatedRequest);
+  useEffect(() => {
+    if (!isLoading && generatedContent) {
+      const newRequests = event.requests ? [...event.requests] : [];
+      console.log("new request useeffect", newRequests);
+      const updatedRequest = {
+        ...request,
+        // generatedContent: generatedContent,
+        generatedContent: generatedContent,
+        isContentGenerated: true,
+      };
+      // Trouver et mettre à jour la demande existante ou ajouter la nouvelle demande
+
+      if (requestId) {
+        const index = newRequests.findIndex((req) => req._id === requestId);
+        newRequests[index] = updatedRequest;
+      } else {
+        newRequests.push(updatedRequest);
+      }
+      // Créez une copie de l'objet event avec les nouvelles requêtes
+      const updatedEvent = {
+        ...event,
+        requests: newRequests,
+      };
+
+      console.log(updatedEvent);
+      // Mettez à jour l'état global avec updatedEvent
+      setEvent(updatedEvent);
+      onSubmit(updatedEvent);
     }
-    // Créez une copie de l'objet event avec les nouvelles requêtes
-    const updatedEvent = {
-      ...event,
-      requests: newRequests,
-    };
+  }, [isLoading]);
 
-    console.log(updatedEvent);
-    // Mettez à jour l'état global avec updatedEvent
-    setEvent(updatedEvent);
-    onSubmit(updatedEvent);
-    
-    setTimeout(() => {
-      router.push(`/event/${eventId}/request/${redirectRequestId}`);
-    }, 2500);
-   }
-
- }, [isLoading])
- 
   const lastMessage = messages[messages.length - 1];
   const generatedContent =
     lastMessage?.role === "assistant" ? lastMessage.content : null;
@@ -184,7 +182,7 @@ console.log(updatedEvent);
           <>
             <label>
               <span className="font-satoshi font-bold text-base text-gray-700">
-              Quel est le type de contenu souhaitez-vous générer ?
+                Quel est le type de contenu souhaitez-vous générer ?
               </span>
               <select
                 name="type_of_content"

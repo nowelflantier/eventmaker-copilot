@@ -12,7 +12,7 @@ const NewRequestPage = () => {
   const { user } = useUser();
   const [formData, setFormData] = useState({});
   
-  const { event, setEvent } = useEvent();
+  const { event, setEvent, setRequest, request } = useEvent();
   const { data: session } = useSession();
   // const [eventDetailsToStore, setEventDetailsToStore] = useState({});
   const router = useRouter();
@@ -54,7 +54,9 @@ const NewRequestPage = () => {
       <FormRequest2
         type="Générer mon contenu !"
         event={event}
+        setRequest={setRequest}
         setEvent={setEvent}
+        request={request}
       />
     </section>
   );

@@ -13,7 +13,7 @@ const EditRequestPage = () => {
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const { event, setEvent, setRequest, request } = useEvent();
-  
+   
   const { data: session } = useSession();
   const [eventDetailsToStore, setEventDetailsToStore] = useState({});
   const router = useRouter();
