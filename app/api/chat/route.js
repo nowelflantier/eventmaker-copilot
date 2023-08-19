@@ -12,9 +12,9 @@ export const runtime = "edge";
 
 export const POST = async (req) => {
   // console.log(req);
-  const {target, tone, topic, type_of_content, support, title, thematics, start_date, end_date, public_type, type_of_event, organizer, concatPrompt} =
+  const {concatPrompt} =
     await req.json();
-  console.log({target, tone, topic, type_of_content, support, title, thematics, start_date, end_date, public_type, type_of_event, organizer, concatPrompt});
+  console.log({concatPrompt});
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -31,7 +31,7 @@ export const POST = async (req) => {
       },
     ],
     temperature: 1,
-    max_tokens: 100,
+    max_tokens: 1000,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,

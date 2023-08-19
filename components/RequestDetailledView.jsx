@@ -6,6 +6,8 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { callOpenAI } from "@utils/openaiContext";
 import { useChat } from "ai/react";
+import { Toaster, toast } from 'react-hot-toast';
+
 
 const RequestDetailedView = ({ event, requestId }) => {
   const router = useRouter();
@@ -25,53 +27,12 @@ const RequestDetailedView = ({ event, requestId }) => {
   const [request, setRequest] = useState();
   const [prompt, setPrompt] = useState();
   const [content, setContent] = useState();
-  const [inputValue, setInputValue] = useState('');
 
-
-  const scrollToContent = () => {
-    if (contentRef.current !== null) {
-      contentRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const { input, handleInputChange, handleSubmit, messages } = useChat({
-    body: {
-      prompt: inputValue,
-
-    },
-    onResponse() {
-      scrollToContent();
-    },
-  });
 
   useEffect(() => {
     setRequest(event?.requests?.find((req) => req._id === requestId));
   }, [event]);
 
-  useEffect(() => {
-    setPrompt(request?.generatedContent);
-    console.log("useeffect event", event);
-    console.log("useeffect request", request);
-    
-    if (!request?.isContentGenerated && prompt) {
-      // setPrompt(request?.generatedPrompt);
-      // console.log(prompt);
-      setInputValue(request?.generatedPrompt);
-      document.getElementById("hiddenForm").submit();
-    }
-  }, [request]);
-  // useEffect(() => {
-  //   console.log("useeffect prompt", prompt);
-  // }, [prompt]);
-  // useEffect(() => {
-  //   if (!request?.isContentGenerated && prompt) {
-  //     document.getElementById('hiddenForm').submit();
-  //   }
-  // }, [request]);
-
-  // useEffect(() => {
-  //   generateContent();
-  // }, [request, prompt]);
   const onSubmit = (e) => {
     // e.preventDefault();
     setPrompt(request?.generatedPrompt);
@@ -79,16 +40,6 @@ const RequestDetailedView = ({ event, requestId }) => {
     handleSubmit(e);
   };
 
-  // useEffect(() => {
-  //   const fetchContent = async () => {
-  //     if (!request?.generatedContent && prompt) {
-  //       const responseContent = await callOpenAI(prompt);
-  //       setContent(responseContent);
-  //     }
-  //   };
-
-  //   fetchContent();
-  // }, [prompt, request]);
   // const onSubmit = (e) => {
   //   // e.preventDefault();
   //   handleSubmit(e);
@@ -104,12 +55,6 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   // }, [content])
 
-  const lastMessage = messages[messages.length - 1];
-  const generatedContent =
-    lastMessage?.role === "assistant" ? lastMessage.content : null;
-
-  const aiResponse = request?.generatedContent;
-  // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst quisque sagittis purus sit. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Tellus integer feugiat scelerisque varius morbi enim nunc. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Consequat ac felis donec et odio pellentesque diam volutpat commodo. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Lacinia at quis risus sed vulputate odio ut enim. Ut porttitor leo a diam. Aliquam purus sit amet luctus venenatis lectus magna fringilla. Tortor id aliquet lectus proin nibh nisl condimentum. Massa placerat duis ultricies lacus sed turpis. Nibh tortor id aliquet lectus proin nibh. Est ullamcorper eget nulla facilisi etiam dignissim diam quis. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Lobortis scelerisque fermentum dui faucibus in ornare. Orci a scelerisque purus semper. Volutpat maecenas volutpat blandit aliquam. Non diam phasellus vestibulum lorem sed risus ultricies tristique.";
 
   const links = [
     {
@@ -126,24 +71,13 @@ const RequestDetailedView = ({ event, requestId }) => {
     },
   ];
 
-  const data = [
-    { name: "Type d'évènement", value: event?.type_of_event },
-    { name: "Public", value: event?.public_type },
-    { name: "Thématiques", value: event?.thematics },
-  ];
-
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
-      <form id="hiddenForm" onSubmit={onSubmit} >
-        <input
-          
-          name="generatedPrompt"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+             <Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{ duration: 2000 }}
         />
-
-        <button type="submit">Submit</button>
-      </form>
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -189,36 +123,22 @@ const RequestDetailedView = ({ event, requestId }) => {
           </p>
         </div>
         <div className="flex prompt_infocard flex-col-reverse">
-          <dt className="text-base leading-7 text-gray-800">{aiResponse}</dt>
-          <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-            {request?.generatedPrompt}
-          </dd>
-          {generatedContent && (
-            <>
-              <div>
-                <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={contentRef}
-                >
-                  Votre contenu généré :
-                </h2>
-              </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 <div
                   className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                   onClick={() => {
-                    navigator.clipboard.writeText(generatedContent);
-                    toast("Content copied to clipboard", {
+                    navigator.clipboard.writeText(request?.generatedContent);
+                    toast("Contenu copié dans le presse papier !", {
                       icon: "✂️",
                     });
                   }}
-                  key={generatedContent}
+                  key={request?.generatedContent}
                 >
-                  <p>{generatedContent}</p>
+                  <p>{request?.generatedContent}</p>
                 </div>
               </div>
-            </>
-          )}
+            
+          
         </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
