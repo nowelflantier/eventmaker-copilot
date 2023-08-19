@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
 import RequestDetailedView2 from "@components/RequestDetailledView2";
+import RequestDetailedView from "@components/RequestDetailledView";
 
 const RequestPage = () => {
   const { user, setCurrentEventId } = useUser();
@@ -50,7 +51,7 @@ const RequestPage = () => {
   }, [user]);
 
   return (
-    <RequestDetailedView2 requestId={requestId} event={event} />
+    <RequestDetailedView requestId={requestId} event={event} />
     // <RequestDetailedView requestId={requestId} event={event} />
   )
 }

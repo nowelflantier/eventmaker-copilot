@@ -3,11 +3,14 @@ import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { callOpenAI } from "@utils/openaiContext";
+import { useChat } from "ai/react";
 
 const RequestDetailedView = ({ event, requestId }) => {
   const router = useRouter();
+  const contentRef = useRef(null);
+
   const params = useParams();
   const eventId = params.id;
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
@@ -20,19 +23,61 @@ const RequestDetailedView = ({ event, requestId }) => {
     : "N/A";
 
   const [request, setRequest] = useState();
-  const [prompt, setPrompt] = useState()
-  const [content, setContent] = useState()
+  const [prompt, setPrompt] = useState();
+  const [content, setContent] = useState();
+  const [inputValue, setInputValue] = useState('');
+
+
+  const scrollToContent = () => {
+    if (contentRef.current !== null) {
+      contentRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const { input, handleInputChange, handleSubmit, messages } = useChat({
+    body: {
+      prompt: inputValue,
+
+    },
+    onResponse() {
+      scrollToContent();
+    },
+  });
+
   useEffect(() => {
     setRequest(event?.requests?.find((req) => req._id === requestId));
-    
-    
   }, [event]);
 
   useEffect(() => {
-    setPrompt(request?.generatedPrompt)
-  
-  
-  }, [request])
+    setPrompt(request?.generatedContent);
+    console.log("useeffect event", event);
+    console.log("useeffect request", request);
+    
+    if (!request?.isContentGenerated && prompt) {
+      // setPrompt(request?.generatedPrompt);
+      // console.log(prompt);
+      setInputValue(request?.generatedPrompt);
+      document.getElementById("hiddenForm").submit();
+    }
+  }, [request]);
+  // useEffect(() => {
+  //   console.log("useeffect prompt", prompt);
+  // }, [prompt]);
+  // useEffect(() => {
+  //   if (!request?.isContentGenerated && prompt) {
+  //     document.getElementById('hiddenForm').submit();
+  //   }
+  // }, [request]);
+
+  // useEffect(() => {
+  //   generateContent();
+  // }, [request, prompt]);
+  const onSubmit = (e) => {
+    // e.preventDefault();
+    setPrompt(request?.generatedPrompt);
+    console.log(prompt);
+    handleSubmit(e);
+  };
 
   // useEffect(() => {
   //   const fetchContent = async () => {
@@ -44,20 +89,24 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   //   fetchContent();
   // }, [prompt, request]);
-  
-  const fetchContent = async () => {
-    if (!request?.generatedContent && prompt) {
-      const responseContent = await callOpenAI(prompt);
-      setContent(responseContent);
-    }
-  };
+  // const onSubmit = (e) => {
+  //   // e.preventDefault();
+  //   handleSubmit(e);
+  // };
+  // const fetchContent = async () => {
+  //   if (!request?.generatedContent && prompt) {
+  //     const responseContent = await callOpenAI(prompt);
+  //     setContent(responseContent);
+  //   }
+  // };
   // useEffect(() => {
   //   console.log(content);
-  
 
   // }, [content])
-  
-  
+
+  const lastMessage = messages[messages.length - 1];
+  const generatedContent =
+    lastMessage?.role === "assistant" ? lastMessage.content : null;
 
   const aiResponse = request?.generatedContent;
   // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst quisque sagittis purus sit. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Tellus integer feugiat scelerisque varius morbi enim nunc. Turpis tincidunt id aliquet risus feugiat in ante metus dictum. Consequat ac felis donec et odio pellentesque diam volutpat commodo. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Lacinia at quis risus sed vulputate odio ut enim. Ut porttitor leo a diam. Aliquam purus sit amet luctus venenatis lectus magna fringilla. Tortor id aliquet lectus proin nibh nisl condimentum. Massa placerat duis ultricies lacus sed turpis. Nibh tortor id aliquet lectus proin nibh. Est ullamcorper eget nulla facilisi etiam dignissim diam quis. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Lobortis scelerisque fermentum dui faucibus in ornare. Orci a scelerisque purus semper. Volutpat maecenas volutpat blandit aliquam. Non diam phasellus vestibulum lorem sed risus ultricies tristique.";
@@ -85,6 +134,16 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
+      <form id="hiddenForm" onSubmit={onSubmit} >
+        <input
+          
+          name="generatedPrompt"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+
+        <button type="submit">Submit</button>
+      </form>
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -131,68 +190,44 @@ const RequestDetailedView = ({ event, requestId }) => {
         </div>
         <div className="flex prompt_infocard flex-col-reverse">
           <dt className="text-base leading-7 text-gray-800">{aiResponse}</dt>
-          {/* <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800"> */}
-          {/* {aiResponse}
-          </dd> */}
-        </div> 
+          <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+            {request?.generatedPrompt}
+          </dd>
+          {generatedContent && (
+            <>
+              <div>
+                <h2
+                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  ref={contentRef}
+                >
+                  Votre contenu généré :
+                </h2>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div
+                  className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedContent);
+                    toast("Content copied to clipboard", {
+                      icon: "✂️",
+                    });
+                  }}
+                  key={generatedContent}
+                >
+                  <p>{generatedContent}</p>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
-      
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
-           
             {links.map((link) => (
               <Link key={link.name} href={link.href}>
                 {link.name} <span aria-hidden="true">&rarr;</span>
               </Link>
             ))}
           </div>
-          {/* <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-              <span className="blue_gradient"> Les informations de </span>
-              votre évènement
-            </h2>
-
-            {!event?.type_of_event ? (
-              <Link
-                className=" prompt_cta_card text-center"
-                href={`/event/${event?._id}/edit`}
-              >
-                <span className=" cta_text p-1 ">
-                  Ajouter les informations de mon évènement{" "}
-                  <span aria-hidden="true">&rarr;</span>
-                </span>
-              </Link>
-            ) : (
-              <Link
-                className=" prompt_cta_card text-center"
-                href={`/event/${event?._id}/edit`}
-              >
-                <span className=" cta_text p-1 ">
-                  Modifier les informations de mon évènement{" "}
-                  <span aria-hidden="true">&rarr;</span>
-                </span>
-              </Link>
-            )}
-            {event?.type_of_event &&
-              data.map((stat) => (
-                <div key={stat.name} className="flex card flex-col-reverse">
-                  <dt className="text-base leading-7 text-gray-500">
-                    {stat.name}
-                  </dt>
-                  <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                    {stat.value}
-                  </dd>
-                </div>
-              ))}
-               <Link
-                className=" prompt_cta_card text-center"
-                href={`/event/${event?._id}`}
-              >
-                <span className=" cta_text p-1 ">
-                  Retour à la page de mon évènement{" "}
-                  <span aria-hidden="true">&rarr;</span>
-                </span>
-              </Link>
-          </dl> */}
         </div>
       </div>
     </div>

@@ -24,6 +24,7 @@ const EventSchema = new Schema({
       tone: { type: String },
       generatedPrompt: { type: String },
       generatedContent: { type: String },
+      isContentGenerated: { type: Boolean },
     },
   ],
 });

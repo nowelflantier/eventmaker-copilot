@@ -51,7 +51,7 @@ const NewRequestPage = () => {
         Donnez nous quelques détails sur le contenu que vous souhaitez générer
         grâce à Eventmaker Copilot.
       </p>
-      <FormRequest2
+      <FormRequest
         type="Générer mon contenu !"
         event={event}
         setEvent={setEvent}

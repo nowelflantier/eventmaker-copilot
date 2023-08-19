@@ -1,11 +1,6 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { ta } from "date-fns/locale";
-// import OpenAI from "openai";
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// })
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -17,9 +12,9 @@ export const runtime = "edge";
 
 export const POST = async (req) => {
   // console.log(req);
-  const { concatPrompt, target, public_type, type_of_content, support, topic } =
+  const {target, tone, topic, type_of_content, support, title, thematics, start_date, end_date, public_type, type_of_event, organizer, concatPrompt} =
     await req.json();
-  console.log("current message api", concatPrompt);
+  console.log({target, tone, topic, type_of_content, support, title, thematics, start_date, end_date, public_type, type_of_event, organizer, concatPrompt});
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -27,16 +22,16 @@ export const POST = async (req) => {
     messages: [
       {
         role: "system",
-        content: `Tu es Eventmaker Copilot, tu aides les organisateurs d'évènements qui utilisent la plateforme Eventmaker à optimiser la gestion de leur évènement et leur facilitent la tâche en leur proposant du contenu pertinent pour les sites web et emails.\n\nEventmaker leur permet notamment de créer la vitrine de leur évènement sur le web, des formulaires d'inscription, des emails et propose des fonctionnalités de networking.\n\nTu vas recevoir les informations de l'évènement concerné ainsi qu'une requete plus spécifique.\nRetourne une structure ou du contenu texte pertinents selon ton analyse de leur domaine d'activité, le type d'évènement et le public ciblé et la demande de la request.\n\nIntègre dans ta réponse des thématiques annexes et complémentaires pour les utilisateurs et le SEO.`,
+        content: `Tu es Eventmaker Copilot, tu aides les organisateurs d'évènements qui utilisent la plateforme Eventmaker à optimiser la gestion de leur évènement et leur facilitent la tâche en leur proposant du contenu pertinent pour les sites web et emails.\n\nEventmaker leur permet notamment de créer la vitrine de leur évènement sur le web, des formulaires d'inscription, des emails et propose des fonctionnalités de networking.\n\nTu vas recevoir les informations de l'évènement concerné ainsi qu'une requete plus spécifique.\nRetourne une structure ou du contenu texte pertinents selon ton analyse de leur domaine d'activité, le type d'évènement et le public ciblé et la demande de la request.\n\nIntègre dans ta réponse des thématiques annexes et complémentaires pour les utilisateurs et le SEO. Toutes tes réponses pourront directement être copiées/collées dans un email ou sur le site. Tu n'as pas à te présenter dans les réponses.`,
       },
       {
         role: "user",
-        //  content: `intitulé est un évènement. Je veux générer un/une ${target} pour mon ${target} dont l'objet est "${target} et qui est destiné aux ${target} avec un ton ${target}.`,
-        content: `${concatPrompt}`,
+        // content: `Le/la ${type_of_event} intitulé "${title}" organisé par ${organizer} est un évènement à destination d'un public ${public_type} et qui aura lieu du ${start_date} au ${end_date}. Ses thématiques principales sont : ${thematics}. Je veux générer un/une ${type_of_content} pour mon ${support} dont l'objet est "${topic} " et qui est destiné aux ${target} avec un ton ${tone}.`,
+        content: `${concatPrompt}`
       },
     ],
     temperature: 1,
-    max_tokens: 900,
+    max_tokens: 100,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
