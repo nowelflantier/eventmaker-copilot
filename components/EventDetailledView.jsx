@@ -86,7 +86,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             ))}
           </div>
           <dl className="mt-6 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => (
+            {/* {stats.map((stat) => (
               <div
                 key={stat.name}
                 className="flex prompt_infocard flex-col-reverse"
@@ -98,7 +98,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   {stat.value}
                 </dd>
               </div>
-            ))}
+            ))} */}
           </dl>
 
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
