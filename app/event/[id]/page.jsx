@@ -55,6 +55,7 @@ const EventPage = () => {
     }
   }, [user]);
   return (
+    
     <EventDetailledView event={eventsDetails} isEventLoaded={isEventLoaded} />
   );
 };
