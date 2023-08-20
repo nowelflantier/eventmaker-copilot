@@ -6,8 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { callOpenAI } from "@utils/openaiContext";
 import { useChat } from "ai/react";
-import { Toaster, toast } from 'react-hot-toast';
-
+import { Toaster, toast } from "react-hot-toast";
 
 const RequestDetailedView = ({ event, requestId }) => {
   const router = useRouter();
@@ -26,35 +25,14 @@ const RequestDetailedView = ({ event, requestId }) => {
 
   const [request, setRequest] = useState();
   const [prompt, setPrompt] = useState();
-  const [content, setContent] = useState();
 
 
   useEffect(() => {
     setRequest(event?.requests?.find((req) => req._id === requestId));
   }, [event]);
-
-  const onSubmit = (e) => {
-    // e.preventDefault();
+  useEffect(() => {
     setPrompt(request?.generatedPrompt);
-    console.log(prompt);
-    handleSubmit(e);
-  };
-
-  // const onSubmit = (e) => {
-  //   // e.preventDefault();
-  //   handleSubmit(e);
-  // };
-  // const fetchContent = async () => {
-  //   if (!request?.generatedContent && prompt) {
-  //     const responseContent = await callOpenAI(prompt);
-  //     setContent(responseContent);
-  //   }
-  // };
-  // useEffect(() => {
-  //   console.log(content);
-
-  // }, [content])
-
+  }, [request]);
 
   const links = [
     {
@@ -62,18 +40,29 @@ const RequestDetailedView = ({ event, requestId }) => {
       href: `/event/${eventId}/request/${requestId}/edit`,
     },
     {
-      name: "Re-générer le contenu",
-      href: `#`,
-    },
-    {
       name: "Retour à la page de l'évènement",
       href: `/event/${eventId}`,
     },
   ];
 
+  const onRegenerateClick = (e) => {
+    //e.preventDefault(); // Empêche la navigation par défaut
+    handleSubmit(e); // Appelle la fonction handleSubmit
+  };
+
+  const { input, handleInputChange, handleSubmit, isLoading, messages } =
+    useChat({
+      body: {
+        event,
+      },
+    });
+
+  const lastMessage = messages[messages.length - 1];
+  const generatedContent =
+    lastMessage?.role === "assistant" ? lastMessage.content : null;
+
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
-   
       <div
         className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
         aria-hidden="true"
@@ -119,36 +108,35 @@ const RequestDetailedView = ({ event, requestId }) => {
           </p>
         </div>
         <div className="flex prompt_infocard flex-col-reverse">
-              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-              <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
-                <div
-                  className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                  onClick={() => {
-                    navigator.clipboard.writeText(request?.generatedContent);
-                    toast("Contenu copié dans le presse papier !", {
-                      icon: "✂️",
-                    });
-                  }}
-                  key={request?.generatedContent}
-                >
-                         
-                  <p>  {request?.generatedContent}</p>
-                </div>
-              </div>
-            
-          
+          <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              toastOptions={{ duration: 2000 }}
+            />
+            <div
+              // className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+              onClick={() => {
+                navigator.clipboard.writeText(request?.generatedContent);
+                toast("Contenu copié dans le presse papier !", {
+                  icon: "✂️",
+                });
+              }}
+              key={request?.generatedContent}
+            >
+              <p> {request?.generatedContent}</p>
+            </div>
+          </div>
         </div>
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
-            {links.map((link) => (
-              <Link key={link.name} href={link.href}>
-                {link.name} <span aria-hidden="true">&rarr;</span>
-              </Link>
-            ))}
+            {links.map((link) =>
+  
+                <Link key={link.name} href={link.href}>
+                  {link.name} <span aria-hidden="true">&rarr;</span>
+                </Link>
+              )
+            }
           </div>
         </div>
       </div>

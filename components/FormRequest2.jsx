@@ -6,6 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 // import { callOpenAI } from "@utils/openaiContext";
 // import LoadingScreen from "./LoadingScreen";
 import { useChat } from "ai/react";
+import { useSearchParams } from "next/navigation";
 
 const FormRequest2 = ({
   type,
@@ -23,6 +24,10 @@ const FormRequest2 = ({
   const [topic, setTopic] = useState("");
   const [tone, setTone] = useState("");
   const [target, setTarget] = useState("");
+  const searchParams = useSearchParams()
+  const regenerate = searchParams.get("regenerate")
+  console.log(regenerate);
+  
   // const [title, setTitle] = useState();
   // const [organizer, setOrganizer] = useState();
   // const [start_date, setStart_date] = useState()
@@ -129,6 +134,7 @@ const FormRequest2 = ({
     setConcatPrompt(
       `Le/la ${event?.type_of_event} intitulé "${event?.title}" organisé par ${event?.organizer} est un évènement à destination d'un public ${request?.public_type} et qui aura lieu du ${event?.start_date} au ${event?.end_date}. Ses thématiques principales sont : ${event?.thematics}. Je veux générer un/une ${request?.type_of_content} pour mon ${request?.support} dont l'objet est "${request?.topic} " et qui est destiné aux ${request?.target} avec un ton ${request?.tone}.`
     );
+    
   }, [request]);
   useEffect(() => {
     // Mettre à jour concatPrompt en utilisant les valeurs actuelles des champs de formulaire
