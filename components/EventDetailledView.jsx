@@ -1,9 +1,22 @@
+"use client";
 import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const EventDetailledView = ({ event, isEventLoaded }) => {
+  useEffect(() => {
+    if (event?.requests) {
+      const newUniqueFilterValues = {
+        type_of_content: getUniqueFilterValues("type_of_content"),
+        support: getUniqueFilterValues("support"),
+        topic: getUniqueFilterValues("topic"),
+        target: getUniqueFilterValues("target"),
+      };
+      setUniqueFilterValues(newUniqueFilterValues);
+    }
+  }, [event?.requests]);
+
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -33,10 +46,60 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Thématiques", value: event?.thematics },
   ];
 
-  const [contentTypeFilter, setContentTypeFilter] = useState(null);
-  const [supportFilter, setSupportFilter] = useState(null);
-  const [messageFilter, setMessageFilter] = useState(null);
-  const [targetFilter, setTargetFilter] = useState(null);
+  const [filters, setFilters] = useState({
+    type_of_content: "",
+    support: "",
+    topic: "",
+    target: "",
+  });
+
+  const [uniqueFilterValues, setUniqueFilterValues] = useState({
+    type_of_content: [],
+    support: [],
+    topic: [],
+    target: [],
+  });
+  const filterConfigurations = [
+    { key: "type_of_content", label: "Tous les contenus" },
+    { key: "support", label: "Tous les supports" },
+    { key: "target", label: "Toutes les cibles" },
+    { key: "topic", label: "Tous les objets" },
+    // Ajoutez d'autres filtres ici
+  ];
+
+  const resetFilters = () => {
+    setFilters({
+      type_of_content: "",
+      support: "",
+      topic: "",
+      target: "",
+    });
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+  const getUniqueFilterValues = (filterKey) => {
+    const values = event?.requests?.map((request) => request[filterKey]) || [];
+    return [...new Set(values)];
+  };
+
+  const filteredRequests = Object.keys(filters).reduce(
+    (filteredRequests, filterKey) => {
+      const filterValue = filters[filterKey];
+      if (filterValue) {
+        return filteredRequests.filter(
+          (request) => request[filterKey] === filterValue
+        );
+      }
+      return filteredRequests;
+    },
+    event?.requests || []
+  );
 
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
@@ -140,10 +203,38 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                <div></div>
+                <div className="flex flex-wrap md:flex-nowrap w-full">
+                  {filterConfigurations.map((filterConfig) => {
+                    const filterKey = filterConfig.key;
+                    const filterLabel = filterConfig.label;
+                    const filterValues = uniqueFilterValues[filterKey];
+
+                    return (
+                      filterValues.length > 0 && (
+                        <select
+                          name={filterKey}
+                          value={filters[filterKey]}
+                          onChange={handleFilterChange}
+                          className="select w-full max-w-lg text-sm font-thin md:max-w-xs m-2"
+                          >
+                          <option className="text-sm " value="">{filterLabel}</option>
+                          {filterValues.map((value) => (
+                            <option key={value} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    );
+                  })}
+                  <div className="text-center w-full">
+                  <button onClick={resetFilters} className="text-center outline_btn mx-auto mt-1">
+                    Réinitialiser les filtres
+                  </button></div>
+                </div>
                 {event.requests &&
                   event.requests !== undefined &&
-                  event.requests.map((request) => (
+                  filteredRequests.map((request) => (
                     <Link
                       key={request._id}
                       className="flex text-center card flex-col"
@@ -152,7 +243,8 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                       <dd className="text-base tracking-tight text-gray-800">
                         <span className="inline-flex items-center mb-2 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                           {request.topic}
-                        </span>   <span className="inline-flex items-center mb-2 rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
+                        </span>{" "}
+                        <span className="inline-flex items-center mb-2 rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
                           {request.tone}
                         </span>
                         <br />
