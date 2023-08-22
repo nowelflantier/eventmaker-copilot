@@ -7,10 +7,11 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
 
+
 const EventPage = () => {
   const { user, setCurrentEventId } = useUser();
   const { data: session } = useSession();
-  const {event, setEvent} = useEvent()
+  const { event, setEvent } = useEvent();
   const router = useRouter();
   const [isEventLoaded, setIsEventLoaded] = useState(false);
   const params = useParams();
@@ -39,15 +40,13 @@ const EventPage = () => {
       website_domain_name: fetchedEventDetails.website_domain_name,
       // Ajoutez ici d'autres propriétés si nécessaire
     };
-    setEvent(eventDetailsToStore)
+    setEvent(eventDetailsToStore);
   };
 
   useEffect(() => {
     {
       !session ? router.push("/") : setCurrentEventId(eventId);
     }
-  
-    
   }, []);
   useEffect(() => {
     {
@@ -55,7 +54,6 @@ const EventPage = () => {
     }
   }, [user]);
   return (
-    
     <EventDetailledView event={eventsDetails} isEventLoaded={isEventLoaded} />
   );
 };

@@ -1,8 +1,7 @@
 import { parseISO, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
-
-
+import { useState } from "react";
 
 const EventDetailledView = ({ event, isEventLoaded }) => {
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
@@ -34,11 +33,11 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     { name: "Thématiques", value: event?.thematics },
   ];
 
-  const handleRequestClick = (requestId) => {
-    // Faites quelque chose avec requestId ici
-    console.log("ID de la demande cliquée:", requestId);
-  };
-  
+  const [contentTypeFilter, setContentTypeFilter] = useState(null);
+  const [supportFilter, setSupportFilter] = useState(null);
+  const [messageFilter, setMessageFilter] = useState(null);
+  const [targetFilter, setTargetFilter] = useState(null);
+
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
@@ -85,21 +84,6 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
               </a>
             ))}
           </div>
-          <dl className="mt-6 grid grid-cols-1 gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
-            {/* {stats.map((stat) => (
-              <div
-                key={stat.name}
-                className="flex prompt_infocard flex-col-reverse"
-              >
-                <dt className="text-base leading-7 text-gray-500">
-                  {stat.name}
-                </dt>
-                <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
-                  {stat.value}
-                </dd>
-              </div>
-            ))} */}
-          </dl>
 
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
@@ -156,14 +140,22 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                {event.requests && event.requests !== undefined &&
-  event.requests.map((request) => (
-    <Link
+                <div></div>
+                {event.requests &&
+                  event.requests !== undefined &&
+                  event.requests.map((request) => (
+                    <Link
                       key={request._id}
                       className="flex text-center card flex-col"
                       href={`/event/${event._id}/request/${request._id}`}
-                      >
+                    >
                       <dd className="text-base tracking-tight text-gray-800">
+                        <span className="inline-flex items-center mb-2 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                          {request.topic}
+                        </span>   <span className="inline-flex items-center mb-2 rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
+                          {request.tone}
+                        </span>
+                        <br />
                         Retrouvez votre{" "}
                         <span className="text-2xl font-bold tracking-tight green_gradient">
                           {request.type_of_content}
