@@ -34,7 +34,7 @@ export async function fetchEventsCategoriesFromServer({ token, eventId }) {
   // Créer un objet contenant toutes les catégories de la BDD
   let mergedCategories;
 
-  if (existingEvent.categories && existingEvent.categories.length > 0) {
+  if (existingEvent && existingEvent.categories.length > 0) {
     mergedCategories = existingEvent.categories.map((category) => {
       const eventmakerCategory = eventmakerCategories.find(
         (emCategory) => emCategory._id === category.id
