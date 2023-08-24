@@ -50,6 +50,21 @@ const RequestDetailedView = ({ event, requestId }) => {
     handleSubmit(e); // Appelle la fonction handleSubmit
   };
 
+  const handleCopyClick = () => {
+    // navigator.clipboard.writeText(request?.generatedContent);
+    const container = document.querySelector('.preview_content');
+    if (container) {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(container);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy',true,"");
+      selection.removeAllRanges();
+    toast("Contenu copié dans le presse papier !", {
+      icon: "✂️",
+    })}
+  }
   const { input, handleInputChange, handleSubmit, isLoading, messages } =
     useChat({
       body: {
@@ -116,15 +131,12 @@ const RequestDetailedView = ({ event, requestId }) => {
             />
             <div
               // className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-              onClick={() => {
-                navigator.clipboard.writeText(request?.generatedContent);
-                toast("Contenu copié dans le presse papier !", {
-                  icon: "✂️",
-                });
-              }}
+              onClick={handleCopyClick}
+              className="cursor-pointer"
               key={request?.generatedContent}
             >
-              <p> {request?.generatedContent}</p>
+              <div className="preview_content" dangerouslySetInnerHTML={{ __html: request?.generatedContent }}/>
+              {/* <p> {request?.generatedContent}</p> */}
             </div>
           </div>
         </div>

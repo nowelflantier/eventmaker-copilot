@@ -199,6 +199,11 @@
   @apply flex justify-between items-center;
 }
 
+.preview_content h2 {
+  font-size: x-large;
+  font-weight: bold;
+}
+
 .loading {
   display: inline-flex;
   align-items: center;
