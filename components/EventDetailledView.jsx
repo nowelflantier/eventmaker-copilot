@@ -17,6 +17,9 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     }
   }, [event?.requests]);
 
+  // État pour contrôler si les filtres sont affichés ou non
+  const [showFilters, setShowFilters] = useState(false);
+
   const start_date = event?.start_date ? parseISO(event.start_date) : null;
   const end_date = event?.end_date ? parseISO(event.end_date) : null;
   const formattedStartDate = start_date
@@ -101,6 +104,10 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
     event?.requests || []
   );
 
+  // Fonction pour vérifier si au moins un filtre est sélectionné
+  const isFilterSelected = () => {
+    return Object.values(filters).some((value) => value !== "");
+  };
   return (
     <div className="relative isolate w-full  glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
       <div
@@ -203,35 +210,53 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                <div className="flex flex-wrap md:flex-nowrap w-full">
-                  {filterConfigurations.map((filterConfig) => {
-                    const filterKey = filterConfig.key;
-                    const filterLabel = filterConfig.label;
-                    const filterValues = uniqueFilterValues[filterKey];
+                <button
+                  onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
+                  className="text-center outline_btn w-10/12 mx-auto mt-1"
+                >
+                  {showFilters ? "Masquer les filtres" : "Afficher les filtres"}{" "}
+                  <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
+                </button>
+                {showFilters && (
+                  <div className="flex flex-wrap md:flex-nowrap w-full">
+                    {filterConfigurations.map((filterConfig) => {
+                      const filterKey = filterConfig.key;
+                      const filterLabel = filterConfig.label;
+                      const filterValues = uniqueFilterValues[filterKey];
 
-                    return (
-                      filterValues.length > 0 && (
-                        <select
-                          name={filterKey}
-                          value={filters[filterKey]}
-                          onChange={handleFilterChange}
-                          className="select w-full max-w-lg text-sm font-thin md:max-w-xs m-2"
+                      return (
+                        filterValues.length > 0 && (
+                          <select
+                            name={filterKey}
+                            value={filters[filterKey]}
+                            onChange={handleFilterChange}
+                            className="select w-full max-w-lg text-sm font-thin md:max-w-xs m-2"
                           >
-                          <option className="text-sm " value="">{filterLabel}</option>
-                          {filterValues.map((value) => (
-                            <option key={value} value={value}>
-                              {value}
+                            <option className="text-sm " value="">
+                              {filterLabel}
                             </option>
-                          ))}
-                        </select>
-                      )
-                    );
-                  })}
-                  <div className="text-center w-full">
-                  <button onClick={resetFilters} className="text-center outline_btn mx-auto mt-1">
-                    Réinitialiser les filtres
-                  </button></div>
-                </div>
+                            {filterValues.map((value) => (
+                              <option key={value} value={value}>
+                                {value}
+                              </option>
+                            ))}
+                          </select>
+                        )
+                      );
+                    })}
+                    {isFilterSelected() && (
+                      <div className="text-center w-full">
+                        <button
+                          onClick={resetFilters}
+                          className="text-center  w-10/12 outline_btn mx-auto mt-1"
+                        >
+                          Réinitialiser les filtres
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {event.requests &&
                   event.requests !== undefined &&
                   filteredRequests.map((request) => (
