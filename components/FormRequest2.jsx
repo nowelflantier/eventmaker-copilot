@@ -353,7 +353,9 @@ const FormRequest2 = ({
                       }}
                       key={generatedContent}
                     >
-                      <p>{generatedContent}</p>
+                                    <div className="preview_content" dangerouslySetInnerHTML={{ __html: generatedContent }}/>
+
+                      {/* <p>{generatedContent}</p> */}
                     </div>
                   </div>
                 </>

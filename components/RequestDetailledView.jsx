@@ -123,7 +123,7 @@ const RequestDetailedView = ({ event, requestId }) => {
           </p>
         </div>
         <div className="flex prompt_infocard flex-col-reverse">
-          <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+          <div className=" flex flex-col items-center justify-center max-w-xl mx-auto">
             <Toaster
               position="top-center"
               reverseOrder={false}
