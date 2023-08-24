@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
 import FormEventEdit from "@components/FormEventEdit";
-import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
+import { fetchEventsDetailsFromServer, fetchEventsCategoriesFromServer } from "@components/FetchEvents";
 
 const EditEventPage = () => {
   const { user } = useUser();
@@ -25,6 +25,19 @@ const EditEventPage = () => {
       token,
       eventId,
     });
+    const fetchedEventCategories = await fetchEventsCategoriesFromServer({
+      token,
+      eventId,
+    });
+    
+    const categories = fetchedEventCategories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      population: category.population,
+      selected: category.selected,
+
+    }));    
+    console.log(categories);
     const eventData = {
       title: fetchedEventDetails.title,
       id: fetchedEventDetails._id,
@@ -35,11 +48,18 @@ const EditEventPage = () => {
       public_type: fetchedEventDetails.public_type,
       thematics: fetchedEventDetails.thematics,
       requests: fetchEventDetails.requests,
+      categories: categories,
     };
     // console.log(fetchedEventDetails);
     setEvent(eventData);
+    // console.log(eventData);
   };
-
+  useEffect(() => {
+    console.log(event);
+  
+   
+  }, [event])
+  
   useEffect(() => {
     {
       user && fetchEventDetails();

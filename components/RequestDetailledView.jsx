@@ -122,6 +122,17 @@ const RequestDetailedView = ({ event, requestId }) => {
             {event?.description}
           </p>
         </div>
+        <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base mb-4 font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
+            {links.map((link) =>
+  
+                <Link key={link.name} href={link.href}>
+                  {link.name} <span aria-hidden="true">&rarr;</span>
+                </Link>
+              )
+            }
+          </div>
+        </div>
         <div className="flex prompt_infocard flex-col-reverse">
           <div className=" flex flex-col items-center justify-center max-w-xl mx-auto">
             <Toaster
@@ -140,17 +151,7 @@ const RequestDetailedView = ({ event, requestId }) => {
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
-          <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-gray-800 sm:grid-cols-2 md:flex lg:gap-x-10">
-            {links.map((link) =>
-  
-                <Link key={link.name} href={link.href}>
-                  {link.name} <span aria-hidden="true">&rarr;</span>
-                </Link>
-              )
-            }
-          </div>
-        </div>
+      
       </div>
     </div>
   );

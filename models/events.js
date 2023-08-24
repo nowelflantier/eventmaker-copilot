@@ -10,7 +10,14 @@ const EventSchema = new Schema({
   type_of_event: { type: String },
   public_type: { type: String },
   thematics: { type: String },
-
+  categories: [
+    {
+      id: { type: String },
+      name: { type: String },
+      population: { type: String },
+      selected: {type: Boolean},
+    },
+  ],
   requests: [
     {
       // _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId(), unique: [true, "Email déjà existant !"], },

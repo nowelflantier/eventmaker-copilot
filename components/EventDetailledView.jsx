@@ -210,13 +210,14 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
+                <div className="w-full text-center ">
                 <button
                   onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
-                  className="text-center outline_btn w-10/12 mx-auto mt-1"
+                  className="text-gray-400"
                 >
                   {showFilters ? "Masquer les filtres" : "Afficher les filtres"}{" "}
                   <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
-                </button>
+                </button></div>
                 {showFilters && (
                   <div className="flex flex-wrap md:flex-nowrap w-full">
                     {filterConfigurations.map((filterConfig) => {
@@ -227,6 +228,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                       return (
                         filterValues.length > 0 && (
                           <select
+                            key={filterKey}
                             name={filterKey}
                             value={filters[filterKey]}
                             onChange={handleFilterChange}

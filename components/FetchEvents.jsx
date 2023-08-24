@@ -9,6 +9,54 @@ export async function fetchEventsFromServer(token) {
   const events = await res.json();
   return events;
 }
+// export async function fetchEventsCategoriesFromServer({token, eventId}) {
+//   const res = await fetch(
+//     `https://app.eventmaker.io/api/v1/events/${eventId}/guest_categories.json?auth_token=${token}`
+//   );
+//   const events = await res.json();
+//   return events;
+// }
+
+export async function fetchEventsCategoriesFromServer({ token, eventId }) {
+  // Récupérer les catégories depuis Eventmaker
+  const res = await fetch(
+    `https://app.eventmaker.io/api/v1/events/${eventId}/guest_categories.json?auth_token=${token}`
+  );
+  const eventmakerCategories = await res.json();
+
+  // Connecter à la base de données (si nécessaire)
+  await connectToBD();
+
+  // Récupérer les catégories existantes depuis votre base de données
+  // let existingCategories = await Category.find({ eventId: eventId });
+  let existingEvent = await Event.findById(eventId);
+
+  // Créer un objet contenant toutes les catégories de la BDD
+  const mergedCategories = existingEvent.categories.map((category) => {
+    // Trouver la catégorie correspondante dans les données Eventmaker
+    const eventmakerCategory = eventmakerCategories.find(
+      (emCategory) => emCategory._id === category.id
+    );
+
+    // Mettre à jour le nom et la population d'après les données Eventmaker
+    // en conservant la valeur de selected de la BDD
+    
+    return {
+      id: category.id,
+      name: eventmakerCategory ? eventmakerCategory.name : category.name,
+      population: eventmakerCategory
+        ? eventmakerCategory.population_type
+        : category.population,
+      selected: category.selected,
+    };
+    
+  }
+  );
+  // console.log(mergedCategories);
+  // Retourner l'objet fusionné
+  return mergedCategories;
+}
+
 
 export async function fetchEventsDetailsFromServer({ token, eventId }) {
   // Récupérer les détails de l'événement depuis Eventmaker

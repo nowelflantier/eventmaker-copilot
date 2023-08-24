@@ -24,10 +24,10 @@ const FormRequest2 = ({
   const [topic, setTopic] = useState("");
   const [tone, setTone] = useState("");
   const [target, setTarget] = useState("");
-  const searchParams = useSearchParams()
-  const regenerate = searchParams.get("regenerate")
+  const searchParams = useSearchParams();
+  const regenerate = searchParams.get("regenerate");
   console.log(regenerate);
-  
+
   // const [title, setTitle] = useState();
   // const [organizer, setOrganizer] = useState();
   // const [start_date, setStart_date] = useState()
@@ -134,7 +134,6 @@ const FormRequest2 = ({
     setConcatPrompt(
       `Le/la ${event?.type_of_event} intitulé "${event?.title}" organisé par ${event?.organizer} est un évènement à destination d'un public ${request?.public_type} et qui aura lieu du ${event?.start_date} au ${event?.end_date}. Ses thématiques principales sont : ${event?.thematics}. Je veux générer un/une ${request?.type_of_content} pour mon ${request?.support} dont l'objet est "${request?.topic} " et qui est destiné aux ${request?.target} avec un ton ${request?.tone}.`
     );
-    
   }, [request]);
   useEffect(() => {
     // Mettre à jour concatPrompt en utilisant les valeurs actuelles des champs de formulaire
@@ -321,7 +320,7 @@ const FormRequest2 = ({
             className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
             disabled
           >
-            <span className="loading">
+            <span className="loading loading-md loading-dots">
               <span style={{ backgroundColor: "white" }} />
               <span style={{ backgroundColor: "white" }} />
               <span style={{ backgroundColor: "white" }} />
@@ -353,7 +352,10 @@ const FormRequest2 = ({
                       }}
                       key={generatedContent}
                     >
-                                    <div className="preview_content" dangerouslySetInnerHTML={{ __html: generatedContent }}/>
+                      <div
+                        className="preview_content"
+                        dangerouslySetInnerHTML={{ __html: generatedContent }}
+                      />
 
                       {/* <p>{generatedContent}</p> */}
                     </div>
