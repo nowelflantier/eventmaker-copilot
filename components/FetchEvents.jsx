@@ -32,27 +32,34 @@ export async function fetchEventsCategoriesFromServer({ token, eventId }) {
   let existingEvent = await Event.findById(eventId);
 
   // Créer un objet contenant toutes les catégories de la BDD
-  const mergedCategories = existingEvent.categories.map((category) => {
-    // Trouver la catégorie correspondante dans les données Eventmaker
-    const eventmakerCategory = eventmakerCategories.find(
-      (emCategory) => emCategory._id === category.id
-    );
+  let mergedCategories;
 
-    // Mettre à jour le nom et la population d'après les données Eventmaker
-    // en conservant la valeur de selected de la BDD
-    
-    return {
-      id: category.id,
-      name: eventmakerCategory ? eventmakerCategory.name : category.name,
-      population: eventmakerCategory
-        ? eventmakerCategory.population_type
-        : category.population,
-      selected: category.selected,
-    };
-    
-  }
-  );
-  // console.log(mergedCategories);
+  if (existingEvent.categories && existingEvent.categories.length > 0) {
+    mergedCategories = existingEvent.categories.map((category) => {
+      const eventmakerCategory = eventmakerCategories.find(
+        (emCategory) => emCategory._id === category.id
+      );
+  
+      return {
+        id: category.id,
+        name: eventmakerCategory ? eventmakerCategory.name : category.name,
+        population: eventmakerCategory
+          ? eventmakerCategory.population_type
+          : category.population,
+        selected: category.selected,
+      };
+    });
+  } else {
+    // Si le tableau de catégories de la BDD est vide, utilisez simplement les données d'Eventmaker
+    mergedCategories = eventmakerCategories.map((category) => ({
+      id: category._id,
+      name: category.name,
+      population: category.population_type,
+      selected: false, // Vous pouvez définir une valeur par défaut ici si nécessaire
+    }));
+  }  
+  
+  console.log(mergedCategories);
   // Retourner l'objet fusionné
   return mergedCategories;
 }
