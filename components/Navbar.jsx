@@ -23,9 +23,10 @@ const Navbar = () => {
     };
     setUpProviders();
     if (isWebview(window.navigator.userAgent)) {
-      toast.error("Open Fatebook in Safari or Chrome to sign in.\n\nGoogle does not support this browser.", {
-        duration: 10000,
-      });
+      toast("Open Fatebook in Safari or Chrome to sign in.\n\nGoogle does not support this browser.", {
+        icon: "✂️",
+        duration: 5000,
+      })
     }
   }, []);
 
