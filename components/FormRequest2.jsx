@@ -345,12 +345,7 @@ const FormRequest2 = ({
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     <div
                       className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                      onClick={() => {
-                        navigator.clipboard.writeText(generatedContent);
-                        toast("Content copied to clipboard", {
-                          icon: "✂️",
-                        });
-                      }}
+                     
                       key={generatedContent}
                     >
                                     <div className="preview_content" dangerouslySetInnerHTML={{ __html: generatedContent }}/>

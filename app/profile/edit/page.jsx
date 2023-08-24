@@ -14,9 +14,9 @@ const EditProfil = ({ params }) => {
   const { user, userName, id, token, setToken,setLast_name ,setFirst_name,last_name, first_name } = useUser();
   const [userData, setUserData] = useState([]);
 
-  useEffect(() => {
-    {!session && router.push('/')}
-  }, [])
+  // useEffect(() => {
+  //   {!session && router.push('/')}
+  // }, [])
   
   useEffect(() => {
     setUserData({

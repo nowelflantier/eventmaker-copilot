@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useUser } from "@utils/UserContext";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { Toaster, toast } from "react-hot-toast";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -13,15 +14,28 @@ const Navbar = () => {
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
+    function isWebview(userAgent) {
+      return /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent) || /Android.*W\/[a-z]+\/[0-9]+.[0-9]+/i.test(userAgent);
+    }
     const setUpProviders = async () => {
       const response = await getProviders();
       setProviders(response);
     };
     setUpProviders();
+    if (isWebview(window.navigator.userAgent)) {
+      toast.error("Open Fatebook in Safari or Chrome to sign in.\n\nGoogle does not support this browser.", {
+        duration: 10000,
+      });
+    }
   }, []);
 
   return (
     <nav className="flex-between w-full mb-3 pt-3">
+        {!session?.user && <Toaster
+              position="top-center"
+              reverseOrder={false}
+              toastOptions={{ duration: 2000 }}
+            />}
       <Link href="/" className="flex gap-2 flex-center">
         <Image
           src="/assets/images/logo.png"
@@ -42,7 +56,7 @@ const Navbar = () => {
             <button type="button" onClick={signOut} className="outline_btn">
               Se déconnecter
             </button>
-            <Link href="/">
+            <Link href="/profile/edit">
               <Image
                 src={session?.user.image}
                 width={37}
@@ -89,7 +103,7 @@ const Navbar = () => {
               <div className="dropdown">
                 <p>Bonjour {session?.user.name}</p>
                 <Link
-                  href="/"
+                  href="/profile/edit"
                   className="dropdown_link"
                   onClick={() => setToggleDropdown(false)}
                 >
