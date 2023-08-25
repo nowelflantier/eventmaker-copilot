@@ -61,13 +61,11 @@ const RetroplanningView = ({ planningData }) => {
                   key={category.id}
                   className="flex text-center cursor-pointer card_emails flex-col"
                 >
-                  <h2>
-                  <span className="text-2xl font-bold tracking-tight blue_gradient">
-                    <div
-                      onClick={() => toggleVisibility(category.id)}
-                    >
+                  <h2  className=" text-2xl font-bold tracking-tight text-black sm:text-2xl">
+                  <span className="black_gradient"onClick={() => toggleVisibility(category.id)}>
+                   
                       {category.name}
-                    </div></span>
+                    </span>
                   </h2>
                   {visibility[category.id] && (
                     <div className="card_container">
