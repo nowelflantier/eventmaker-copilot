@@ -44,7 +44,7 @@ const RetroplanningView = ({ planningData }) => {
       </div>
       <div className="mx-auto max-w-7xl px-3 lg:px-3">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
             <span className="green_gradient">TITLE </span>
             <br />
             <span className="black_gradient text-2xl">title 2?</span>
