@@ -44,19 +44,19 @@ const RetroplanningView = ({ planningData }) => {
               <div className="card_container">
                 {planningData.map((category) => (
                   <div
-                    key={category.category_id}
+                    key={category.id}
                     className="flex text-center card flex-col"
                   >
-                    <h4>{getCategoryName(category.category_id)}</h4>
+                    <h4>{category.name}</h4>
                     <div className="card_container">
                     {category.emails.map((email, index) => (
                       <div
                         key={index}
                         className="flex text-center card flex-col"
                       >
-                        <p>Date : {email.date}</p>
-                        <p>Sujet : {email.subject}</p>
-                        <p>Objectif : {email.objectif}</p>
+                        <p><span className="font-bold">Date :</span> {email.date}</p>
+                        <p><span className="font-bold">Sujet :</span> {email.subject}</p>
+                        <p><span className="font-bold">Objectif :</span> {email.objectif}</p>
                       </div>
                     ))}</div>
                   </div>
