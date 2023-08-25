@@ -63,11 +63,11 @@ const RetroplanningView = ({ planningData }) => {
                 >
                   <h2>
                   <span className="text-2xl font-bold tracking-tight blue_gradient">
-                    <button
+                    <div
                       onClick={() => toggleVisibility(category.id)}
                     >
                       {category.name}
-                    </button></span>
+                    </div></span>
                   </h2>
                   {visibility[category.id] && (
                     <div className="card_container">
