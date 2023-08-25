@@ -59,7 +59,7 @@ export async function fetchEventsCategoriesFromServer({ token, eventId }) {
     }));
   }  
   
-  console.log(mergedCategories);
+  // console.log(mergedCategories);
   // Retourner l'objet fusionné
   return mergedCategories;
 }

@@ -37,7 +37,7 @@ const EditEventPage = () => {
       selected: category.selected,
 
     }));    
-    console.log(categories);
+    // console.log(categories);
     const eventData = {
       title: fetchedEventDetails.title,
       id: fetchedEventDetails._id,
@@ -54,11 +54,6 @@ const EditEventPage = () => {
     setEvent(eventData);
     // console.log(eventData);
   };
-  useEffect(() => {
-    console.log(event);
-  
-   
-  }, [event])
   
   useEffect(() => {
     {
