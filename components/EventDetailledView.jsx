@@ -193,6 +193,29 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   </dd>
                 </div>
               ))}
+            {/* partie générer mon contenu par catégorie */}
+            {event?.type_of_event && (
+              <div className="card_container">
+                <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
+                  <span className="black_gradient">
+                    Les catégories pour lesquelles générer votre contenu
+                  </span>
+                </h3>
+                <div className="card_container">
+                {event?.type_of_event &&
+                  event?.categories?.filter(stat => stat.selected === true).map((stat) => (
+                    <div key={stat.name} className="flex card flex-col-reverse">
+                      <dt className="text-base leading-7 text-gray-500">
+                        {stat.population}
+                      </dt>
+                      <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-800">
+                        {stat.name}
+                      </dd>
+                    </div>
+                  ))}</div>
+              </div>
+            )}
+            {/* partie générer mon contenu individuel */}
             {event?.type_of_event && (
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
@@ -201,6 +224,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   </span>
                   votre évènement
                 </h3>
+
                 <Link
                   className=" prompt_cta_card text-center"
                   href={`/event/${event?._id}/request/new`}
@@ -211,13 +235,16 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   </span>
                 </Link>
                 <div className="w-full text-center ">
-                <button
-                  onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
-                  className="text-gray-400"
-                >
-                  {showFilters ? "Masquer les filtres" : "Afficher les filtres"}{" "}
-                  <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
-                </button></div>
+                  <button
+                    onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
+                    className="text-gray-400"
+                  >
+                    {showFilters
+                      ? "Masquer les filtres"
+                      : "Afficher les filtres"}{" "}
+                    <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
+                  </button>
+                </div>
                 {showFilters && (
                   <div className="flex flex-wrap md:flex-nowrap w-full">
                     {filterConfigurations.map((filterConfig) => {

@@ -8,17 +8,23 @@ const FormEventEdit = ({ type, event, submitting, handleSubmit, setEvent }) => {
     setEvent((prevEvent) => ({
       ...prevEvent,
       categories: prevEvent.categories.map((category) =>
-        category.id === categoryId ? { ...category, selected: isChecked } : category
+        category.id === categoryId
+          ? { ...category, selected: isChecked }
+          : category
       ),
     }));
   };
+
+  // Comptez le nombre de catégories déjà sélectionnées
+  const selectedCount =
+    event?.categories?.filter((category) => category.selected).length || 0;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEvent((prevEvent) => ({
       ...prevEvent,
       [name]: value,
     }));
-    
   };
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
@@ -59,42 +65,52 @@ const FormEventEdit = ({ type, event, submitting, handleSubmit, setEvent }) => {
               className="form_input"
             >
               <option value="" disabled hidden>
-              Choisissez une option
-            </option>
+                Choisissez une option
+              </option>
               <option value="B2B">B2B</option>
-              <option value="B2C">B2C</option><option value="B2C & B2B">B2C & B2B</option>
+              <option value="B2C">B2C</option>
+              <option value="B2C & B2B">B2C & B2B</option>
             </select>
           </label>
         )}
-       
+
         {event?.public_type && (
-        <label>
-          <span className="font-satoshi font-bold text-base text-gray-700">
-            Quelles sont les thématiques principales de votre évènement ?
-          </span>
-          <textarea
-            name="thematics"
-            value={event?.thematics || ""}
-            onChange={handleChange}
-            placeholder="Ex : Marketing, Evènementiel, Data"
-            required
-            className="form_input"
-          />
-        </label>)}
-        <div>
-        <span className="font-satoshi font-bold text-base text-gray-700">Pour quelles catégories souhaitez-vous générer du contenu :</span>
-        {event?.categories?.map((category) => (
-          <div className="label cursor-pointer" key={category.id}>
-            <label className="label-text">{category.name} ({category.population})</label>
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={category.selected || false}
-              onChange={(e) => handleToggleChange(category.id, e.target.checked)}
+          <label>
+            <span className="font-satoshi font-bold text-base text-gray-700">
+              Quelles sont les thématiques principales de votre évènement ?
+            </span>
+            <textarea
+              name="thematics"
+              value={event?.thematics || ""}
+              onChange={handleChange}
+              placeholder="Ex : Marketing, Evènementiel, Data"
+              required
+              className="form_input"
             />
-          </div>
-        ))}
-      </div>
+          </label>
+        )}
+        <div>
+          <span className="font-satoshi font-bold text-base text-gray-700">
+            Pour quelles catégories souhaitez-vous générer du contenu : <span className="font-light text-gray-400">(5 max.)</span>
+          </span>
+          {event?.categories?.map((category) => (
+            <div className="label cursor-pointer" key={category.id}>
+              <label className="label-text">
+                {category.name} ({category.population})
+              </label>
+              <input
+                type="checkbox"
+                className="toggle"
+                checked={category.selected || false}
+                onChange={(e) =>
+                  handleToggleChange(category.id, e.target.checked)
+                }
+                // Désactivez la case à cocher si le maximum est atteint et que cette case n'est pas déjà cochée
+                disabled={selectedCount >= 5 && !category.selected}
+              />
+            </div>
+          ))}
+        </div>
 
         <div className="flex-end mx-3 mb-5 gap-4">
           <Link href="/" className="text-gray-500 text-sm">
