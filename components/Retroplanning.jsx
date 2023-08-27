@@ -106,7 +106,7 @@ const RetroplanningView = ({ planningData, event, eventId }) => {
     });
   // console.log("Valeurs retournées par useChat:", { handleSubmit, isLoading, messages });
 
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage = messages.length > 3 ? messages[messages.length - 1] : null;
   const generatedContent =
     lastMessage?.role === "assistant" ? lastMessage.content : null;
 
