@@ -197,19 +197,31 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             {event?.categories && (
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  <span className="red_gradient">
-                    Les catégories</span> pour lesquelles générer vos rétroplannings
+                  Générer vos contenus{" "}
+                  <span className="red_gradient">par catégories</span>
                 </h3>
-                <Link
-                  className=" prompt_cta_card text-center"
-                  href={`/event/${event?._id}/retroplanning`}
-                >
-                  <span className=" cta_text p-1 ">
-                    Générer ou consulter les rétroplannings{" "}
-                    <span aria-hidden="true">&rarr;</span>
-                  </span>
-                </Link>
-                <div className="card_container">
+                {!event?.retroplannings ? (
+                  <Link
+                    className=" prompt_cta_card text-center"
+                    href={`/event/${event?._id}/retroplanning`}
+                  >
+                    <span className=" cta_text p-1 ">
+                      Créer mes contenus{" "}
+                      <span aria-hidden="true">&rarr;</span>
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    className=" prompt_cta_card text-center"
+                    href={`/event/${event?._id}/retroplanning`}
+                  >
+                    <span className=" cta_text p-1 ">
+                      Consulter mes contenus{" "}
+                      <span aria-hidden="true">&rarr;</span>
+                    </span>
+                  </Link>
+                )}
+                {/* <div className="card_container">
                 {event?.categories &&
                   event?.categories?.filter(stat => stat.selected === true).map((stat) => (
                     <div key={stat.name} className="flex card flex-col-reverse">
@@ -220,16 +232,14 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                         {stat.name}
                       </dd>
                     </div>
-                  ))}</div>
+                  ))}</div> */}
               </div>
             )}
             {/* partie générer mon contenu individuel */}
             {event?.type_of_event && (
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  <span className="orange_gradient">
-                    Les contenus générés{" "}
-                  </span>
+                  <span className="orange_gradient">Les contenus générés </span>
                   pour votre évènement
                 </h3>
 
@@ -242,17 +252,19 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                {event?.requests.length > 0 && <div className="w-full text-center ">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
-                    className="text-gray-400"
-                  >
-                    {showFilters
-                      ? "Masquer les filtres"
-                      : "Afficher les filtres"}{" "}
-                    <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
-                  </button>
-                </div>}
+                {event?.requests.length > 0 && (
+                  <div className="w-full text-center ">
+                    <button
+                      onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
+                      className="text-gray-400"
+                    >
+                      {showFilters
+                        ? "Masquer les filtres"
+                        : "Afficher les filtres"}{" "}
+                      <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
+                    </button>
+                  </div>
+                )}
                 {showFilters && (
                   <div className="flex flex-wrap md:flex-nowrap w-full">
                     {filterConfigurations.map((filterConfig) => {

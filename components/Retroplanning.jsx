@@ -8,10 +8,10 @@ import { useSearchParams } from "next/navigation";
 const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
   let updatedEvent = {}
   const [visibility, setVisibility] = useState(
-    planningData.reduce((acc, category) => {
-      acc[category.id] = false; // Masqué par défaut
-      return acc;
-    }, {})
+    // planningData.reduce((acc, category) => {
+    //   acc[category.id] = false; // Masqué par défaut
+    //   return acc;
+    // }, {})
   );
   const [formVisibility, setFormVisibility] = useState(false);
   const [formData, setFormData] = useState([]);
@@ -93,7 +93,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
   const user = `L'événement \"Les automnales 2023\" qui se déroule du 10 novembre 2023 9h00 au 22 novembre 2023 18h00. Les coour prévoir au mieux les communications pour chacune des catégories suivantes : \n- Exposant\n- Visiteur\n- Newsletter\n- VIP\nLes thématiques principales de l'évènement sont les sports nautiques, de montagne, collectifs mais aussi le vin, les spécialités locales suisses. Le type d'événement est un(e) Foire et le public cible est B2C.`;
   const assistant = `[{\n    \"id\": \"123\",\n    \"category_name\": \"Exposant\"\n    \"emails\": [{\n        \"date\": \"01/01/2023 09:00\",\n        \"subject\": \"Appel à candidatures pour les exposants\",\n        \"objectif\": \"Inviter les exposants à participer à l'événement\"\n    },\n    {\n        \"date\": \"01/07/2023 09:00\",\n        \"subject\": \"Confirmation des exposants retenus\",\n        \"objectif\": \"Notifier les exposants sélectionnés pour leur participation\"\n    },\n    {\n        \"date\": \"01/10/2023 09:00\",\n        \"subject\": \"Informations pratiques pour les exposants\",\n        \"objectif\": \"Fournir les détails logistiques et les informations nécessaires aux exposants\"\n    }]\n},\n{\n    \"id\": \"456\",\n\"category_name\": \"Visiteur\"\n    \"emails\": [{\n        \"date\": \"01/08/2023 09:00\",\n        \"subject\": \"Invitation à visiter Les Automnales 2023\",\n        \"objectif\": \"Encourager les visiteurs à participer à l'événement\"\n    },\n    {\n        \"date\": \"01/11/2023 09:00\",\n        \"subject\": \"Programme complet de l'événement\",\n        \"objectif\": \"Donner un aperçu détaillé du programme et des activités proposées\"\n    },\n    {\n        \"date\": \"01/15/2023 09:00\",\n        \"subject\": \"Rappel de l'événement\",\n        \"objectif\": \"Rappeler aux visiteurs la date et les horaires de l'événement\"\n    }]\n},\n{\n    \"id\": \"789\",\n\"category_name\": \"Newsletter\"\n    \"emails\": [{\n        \"date\": \"01/20/2023 09:00\",\n        \"subject\": \"Inscription à la newsletter de Les Automnales 2023\",\n        \"objectif\": \"Encourager les personnes intéressées à s'inscrire à la newsletter pour recevoir les dernières actualités\"\n    },\n    {\n        \"date\": \"01/25/2023 09:00\",\n        \"subject\": \"Offres exclusives pour les abonnés à la newsletter\",\n        \"objectif\": \"Proposer des offres spéciales aux abonnés de la newsletter\"\n    },\n    {\n        \"date\": \"01/30/2023 09:00\",\n        \"subject\": \"Derniers rappels avant l'événement\",\n        \"objectif\": \"Rappeler aux abonnés les dates et les horaires de l'événement\"\n    }]\n},\n{\n    \"id\": \"XYZ\",\n\"category_name\": \"VIP\"\n    \"emails\": [{\n        \"date\": \"01/01/2023 09:00\",\n        \"subject\": \"Invitation VIP à Les Automnales 2023\",`;
 
-  const { handleSubmit, error, isLoading, messages, setMessages, append } =
+  const { isLoading, messages, append } =
     useChat({
       body: {
         concatPrompt,
@@ -162,6 +162,11 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
     console.log("event", event);
     updatedEvent = event
   }, [event]);  // Se déclenche à chaque changement de `event`
+  useEffect(() => {
+    console.log("updated event",updatedEvent);
+  
+
+  }, [updatedEvent])
   
   return (
     <div className="relative isolate w-full glassmorphism mb-10 overflow-hidden bg-gray-900 py-24 sm:py-12">
@@ -358,7 +363,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
 
           <p className=" text-lg leading-8 text-gray-500"></p>
         </div>
-        {(updatedEvent?.retroplannings?.length > 0 || generatedContent) && (
+        {event?.retroplannings && (
           <>
             <div className="card_container">
               <h3 className="text-2xl mt-6 font-bold text-center tracking-tight text-black sm:text-3xl">
@@ -371,7 +376,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
             <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
               <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="card_container">
-                  {updatedEvent?.retroplannings?.map((retroplanning) => (
+                  {event?.retroplannings?.map((retroplanning) => (
                     <div
                       key={retroplanning.id}
                       className="flex text-center cursor-pointer card_emails flex-col"
