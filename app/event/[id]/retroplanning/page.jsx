@@ -219,7 +219,7 @@ const RetroplanningPage = () => {
     ];
   return (
     // Dans le composant EventDetailledView
-    <RetroplanningView event={eventsDetails} eventId={eventId} planningData={planningData} />
+    <RetroplanningView event={eventsDetails} setEvent={setEvent} eventId={eventId} planningData={planningData} />
   );
 };
 

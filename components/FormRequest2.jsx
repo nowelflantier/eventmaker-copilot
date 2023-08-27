@@ -112,7 +112,7 @@ const FormRequest2 = ({
 
   const saveEventData = async (updatedEvent) => {
     // e.preventDefault()
-    console.log(updatedEvent);
+    // console.log(updatedEvent);
     try {
       const response = await fetch(`/api/events/${eventId}`, {
         method: "PATCH",
@@ -120,7 +120,7 @@ const FormRequest2 = ({
         body: JSON.stringify(updatedEvent),
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       if (response.ok) {
         setRequest({});
