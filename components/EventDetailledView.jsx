@@ -242,7 +242,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                {event?.requests && <div className="w-full text-center ">
+                {event?.requests.length > 0 && <div className="w-full text-center ">
                   <button
                     onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
                     className="text-gray-400"

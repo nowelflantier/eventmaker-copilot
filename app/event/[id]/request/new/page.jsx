@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useEvent } from "@utils/EventContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
-import FormRequest from "@components/FormRequest";
+
 import FormRequest2 from "@components/FormRequest2";
 
 const NewRequestPage = () => {

@@ -25,8 +25,7 @@ const FormRequest2 = ({
   const [tone, setTone] = useState("");
   const [target, setTarget] = useState("");
   const searchParams = useSearchParams();
-  const regenerate = searchParams.get("regenerate");
-  console.log(regenerate);
+  // const regenerate = searchParams.get("regenerate");
 
   // const [title, setTitle] = useState();
   // const [organizer, setOrganizer] = useState();
@@ -73,13 +72,29 @@ const FormRequest2 = ({
 
     handleInputChange(e);
   };
-
-  const { input, handleInputChange, handleSubmit, isLoading, messages } =
+  const system = `Tu es un assistant virtuel pour les organisateurs d'événements utilisant la plateforme Eventmaker. Ton rôle est de générer du contenu pertinent pour les sites web et emails, formaté en HTML, en fonction des informations de l'événement concerné et des demandes spécifiques. \n\n L'objectif est de fournir du contenu directement utilisable, sans introduction ni conversation. Les réponses doivent être rédigées comme si elles provenaient de l'organisateur de l'événement lui-même. \n\n Eventmaker permet aux organisateurs de créer la vitrine de leur événement sur le web, des formulaires d'inscription, des emails, et propose des fonctionnalités de networking. \n\n En fonction de l'analyse du domaine d'activité, du type d'événement, du public ciblé et de la demande spécifique, retourne du contenu texte pertinent et formaté en HTML. Ce contenu doit être prêt à être copié/collé directement dans un email ou sur le site, et affiché tel quel dans un navigateur web. \n\n Tu dois insérer directement des variables en respectant ce format, par exemple : {{guest.first_name}}, {{guest.last_name}}, {{event.title}} `;
+  const user = `Le/la Salon intitulé \"Salon International des Inventions\" organisé par Palexpo est un évènement à destination d'un public B2B et qui aura lieu du 8 mars 2024 au 11 mars 2024. Ses thématiques principales sont : Innovation, Invention, International. Je veux générer un/une texte pour mon email dont l'objet est \"Confirmation \" et qui est destiné aux Visiteurs avec un ton Amical.`;
+  const assistant = `<HTML>\n  <body>\n    <h2>Confirmation de votre inscription - Salon International des Inventions</h2>\n    <p>Bonjour {{guest.first_name}},</p>\n    \n    <p>Nous sommes ravis de vous confirmer votre inscription au Salon International des Inventions, organisé par Palexpo. Merci d'avoir choisi de participer à cet événement unique en son genre.</p>\n    \n    <p>Le salon se déroulera du <strong>8 mars 2024 au 11 mars 2024</strong>. Nous espérons que ces quatre jours seront un moment riche en rencontres, en découvertes et en opportunités.</p>\n    \n    <p>Cet événement, axé sur les thématiques de l'innovation, de l'invention et de l'international, réunit des exposants de renommée mondiale venant des quatre coins du globe. Vous aurez ainsi l'opportunité d'explorer les dernières tendances technologiques, de découvrir des inventions révolutionnaires et de rencontrer des entrepreneurs inspirants.</p>\n    \n    <p>Nous vous encourageons à consulter notre site`;
+  const { input, handleInputChange, handleSubmit, isLoading, messages, append } =
     useChat({
       body: {
         concatPrompt,
       },
-      onResponse() {
+      initialMessages: [
+        {
+          role: "system",
+          content: `${system}`,
+        },
+        {
+          role: "user",
+          content: `${user}`,
+        },
+        {
+          role: "assistant",
+          content: `${assistant}`,
+        },
+      ],
+      onResponse(response) {
         scrollToContent();
       },
     });
@@ -95,7 +110,7 @@ const FormRequest2 = ({
     redirectRequestId = lastRequest?._id;
   }
 
-  const onSubmit = async (updatedEvent) => {
+  const saveEventData = async (updatedEvent) => {
     // e.preventDefault()
     console.log(updatedEvent);
     try {
@@ -169,19 +184,33 @@ const FormRequest2 = ({
       console.log(updatedEvent);
       // Mettez à jour l'état global avec updatedEvent
       setEvent(updatedEvent);
-      onSubmit(updatedEvent);
+      saveEventData(updatedEvent);
     }
   }, [isLoading]);
 
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage =
+    messages.length > 3 ? messages[messages.length - 1] : null;
   const generatedContent =
     lastMessage?.role === "assistant" ? lastMessage.content : null;
+  // useEffect(() => {
+  //   console.log(generatedContent);
+  // }, [generatedContent])
+  console.log(messages);
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    await append({
+      content: concatPrompt,
+      role: "user",
+    });
+    console.log("mesages", messages);
+  };
   return (
     <section className="w-full max-w-full flex-start mb-10 flex-col">
       <form
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
         {!generatedContent && (
           <>
