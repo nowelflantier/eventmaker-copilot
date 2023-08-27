@@ -1,5 +1,5 @@
 "use client";
-import RetroplanningView from "@components/Retroplanning";
+import GenerateRetroplanning from "@components/GenerateRetroplanning";
 import { useUser } from "@utils/UserContext";
 import { fetchEventsDetailsFromServer } from "@components/FetchEvents";
 import { useParams, useRouter } from "next/navigation";
@@ -46,7 +46,7 @@ const RetroplanningPage = () => {
 
   return (
     // Dans le composant EventDetailledView
-    <RetroplanningView event={eventsDetails} setEvent={setEvent} eventId={eventId}  />
+    <GenerateRetroplanning event={eventsDetails} setEvent={setEvent} eventId={eventId}  />
   );
 };
 

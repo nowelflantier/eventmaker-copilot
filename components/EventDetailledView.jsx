@@ -197,13 +197,12 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             {event?.categories && (
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  Générer vos contenus{" "}
-                  <span className="red_gradient">par catégories</span>
+                  <span className="red_gradient">Générez vos rétroplannings et contenus</span> par catégories
                 </h3>
-                {!event?.retroplannings ? (
+                {!event?.retroplannings?.length > 0 ? (
                   <Link
                     className=" prompt_cta_card text-center"
-                    href={`/event/${event?._id}/retroplanning`}
+                    href={`/event/${event?._id}/retroplannings/new`}
                   >
                     <span className=" cta_text p-1 ">
                       Créer mes contenus{" "}
@@ -213,7 +212,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                 ) : (
                   <Link
                     className=" prompt_cta_card text-center"
-                    href={`/event/${event?._id}/retroplanning`}
+                    href={`/event/${event?._id}/retroplannings`}
                   >
                     <span className=" cta_text p-1 ">
                       Consulter mes contenus{" "}
@@ -237,9 +236,11 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
             )}
             {/* partie générer mon contenu individuel */}
             {event?.type_of_event && (
+                
+
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  <span className="orange_gradient">Les contenus générés </span>
+                  <span className="orange_gradient">Générez des contenus à la demande </span>
                   pour votre évènement
                 </h3>
 
@@ -248,7 +249,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                   href={`/event/${event?._id}/request/new`}
                 >
                   <span className=" cta_text p-1 ">
-                    Générer du contenu pour mon évènement{" "}
+                    Générer du contenu{" "}
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>

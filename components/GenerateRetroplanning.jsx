@@ -2,17 +2,13 @@
 import { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useChat } from "ai/react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
-const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
+const GenerateRetroplanning = ({ planningData, event, setEvent, eventId }) => {
   let updatedEvent = {}
-  const [visibility, setVisibility] = useState(
-    // planningData.reduce((acc, category) => {
-    //   acc[category.id] = false; // Masqué par défaut
-    //   return acc;
-    // }, {})
-  );
+  const router = useRouter()
+  const pathname = usePathname()
   const [formVisibility, setFormVisibility] = useState(false);
   const [formData, setFormData] = useState([]);
   const [concatPrompt, setConcatPrompt] = useState();
@@ -33,8 +29,6 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
   };
   // Fonction pour mettre à jour le formulaire
   const updateFormData = ({ categoryId, field, value }) => {
-    // console.log("Updating form data", { categoryId, field, value, formData }); // Debug
-
     const updatedFormData = [...formData];
     const index = updatedFormData.findIndex(
       (item) => item.categoryId === categoryId
@@ -59,11 +53,13 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
       name: "Retour à la page de l'évènement",
       href: `/event/${eventId}`,
     },
+    {
+      name: pathname === `/event/${eventId}/retroplannings` ? "Modifier mes rétroplannings" : "Retour au dashboard",
+      href: pathname === `/event/${eventId}/retroplannings` ? `/event/${eventId}/retroplannings/new` : '/dashboard',
+    },
   ];
 
   const saveEventData = async (updatedEvent) => {
-    // e.preventDefault()
-    // console.log(updatedEvent);
     try {
       const response = await fetch(`/api/events/${eventId}`, {
         method: "PATCH",
@@ -73,21 +69,15 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
+        setTimeout(() => {
+          router.push(`/event/${eventId}/retroplannings`)
+        })
       }
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const handleFormVisibility = () => {
-    setFormVisibility(!formVisibility);
-  };
-  const toggleVisibility = (categoryId) => {
-    setVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      [categoryId]: !prevVisibility[categoryId],
-    }));
-  };
 
   const system = `Générer un rétroplanning pour l'événement dont les informations te seront communiquées dans un prochain message. Tu dois créer un rétroplanning spécifique pour prévoir au mieux les communications pour chacune des catégories demandées en prenant en compte des dates cohérentes (par exemple les exposant ou les conférenciers doivent être contacté largement en amont, voire être booké d'une année sur l'autre) : \n- Exposant - id : 123\n- Visiteur - id : 456\n- Newsletter - id : 789\n- VIP  - XYZ\n- Speakers -ABC\nFormate le contenu au format Javascript, par exemple en respectant la structure de la base de données suivante :\n[\n{\ncategory_name: category_name,\nid: cateogory_id,\nemails: [{\ndate: date_heure_denvoi,\nsubject: subject,\nobjectif: objectif_de_lemail,\n},\n{\ndate: date_heure_denvoi,\nsubject: subject,\nobjectif: objectif_de_lemail,\n}]\n}\n]\n`;
   const user = `L'événement \"Les automnales 2023\" qui se déroule du 10 novembre 2023 9h00 au 22 novembre 2023 18h00. Les coour prévoir au mieux les communications pour chacune des catégories suivantes : \n- Exposant\n- Visiteur\n- Newsletter\n- VIP\nLes thématiques principales de l'évènement sont les sports nautiques, de montagne, collectifs mais aussi le vin, les spécialités locales suisses. Le type d'événement est un(e) Foire et le public cible est B2C.`;
@@ -159,7 +149,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
     }
   }, [isLoading]);
   useEffect(() => {
-    console.log("event", event);
+    console.log("event", pathname);
     updatedEvent = event
   }, [event]);  // Se déclenche à chaque changement de `event`
   useEffect(() => {
@@ -195,7 +185,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
         />
       </div>
       <div className="mx-auto max-w-7xl px-3 lg:px-3">
-        <div className="mx-auto  lg:mx-0">
+        <div className="mx-auto max-w-2xl lg:mx-0">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
             <span className="green_gradient">{event?.title} </span>
             <br />
@@ -210,22 +200,9 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
               ))}
             </div>
           </div>
-          <div className="card_container">
-            <button
-              className="prompt_cta_card text-center"
-              onClick={handleFormVisibility}
-            >
-              <span className="cta_text p-1">
-                Générer du contenu pour mon évènement{" "}
-                <span aria-hidden="true">&rarr;</span>
-              </span>
-            </button>
-          </div>
           {/* formulaire de qualification */}
-          {formVisibility && (
-            <>
-              {" "}
-              <div className="card_container">
+    
+       {pathname === `/event/${eventId}/retroplannings/new` && <div className="card_container">
                 <form
                   className=" w-full m-4  flex flex-col gap-7 glassmorphism"
                   onSubmit={onSubmit}
@@ -250,7 +227,7 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
                           >
                             <h2
                               className="text-2xl font-bold tracking-tight sm:text-2xl"
-                              onClick={() => toggleVisibility(category.id)}
+                              
                             >
                               <span className="blue_gradient">
                                 {category.name}
@@ -357,13 +334,12 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
                     )}
                   </div>
                 </form>
-              </div>
-            </>
-          )}
+              </div>}
+       
 
           <p className=" text-lg leading-8 text-gray-500"></p>
         </div>
-        {event?.retroplannings && (
+        {event?.retroplannings?.length > 0 && pathname === `/event/${eventId}/retroplannings` && (
           <>
             <div className="card_container">
               <h3 className="text-2xl mt-6 font-bold text-center tracking-tight text-black sm:text-3xl">
@@ -424,4 +400,4 @@ const RetroplanningView = ({ planningData, event, setEvent, eventId }) => {
   );
 };
 
-export default RetroplanningView;
+export default GenerateRetroplanning;
