@@ -97,6 +97,10 @@
   @apply bg-gradient-to-r from-teal-400 via-emerald-500 to-cyan-500 bg-clip-text text-transparent;
 }
 
+.red_gradient {
+  @apply bg-gradient-to-r from-red-500 via-red-700 to-rose-300 bg-clip-text text-transparent;
+}
+
 .blue_gradient {
   @apply bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent;
 }

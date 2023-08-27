@@ -47,13 +47,13 @@ const FormRequest = ({ type, event, setEvent, currentRequest }) => {
   }, [event]);
 
   const handleSubmit = async (e) => {
-    console.log("État initial de event.requests:", event.requests);
+    // console.log("État initial de event.requests:", event.requests);
 
     e.preventDefault();
     setSubmitting(true);
     // Créer une copie du tableau requests
     const newRequests = event.requests ? [...event.requests] : [];
-    console.log("newRequests avant la mise à jour:", newRequests);
+    // console.log("newRequests avant la mise à jour:", newRequests);
 
     // Concaténer les valeurs des champs souhaités
     concatPrompt = `Le/la ${event.type_of_event} intitulé "${event.title}" organisé par ${event.organizer} est un évènement à destination d'un public ${event.public_type} et qui aura lieu du ${event.start_date} au ${event.end_date}. Ses thématiques principales sont : ${event.thematics}. Je veux générer un/une ${request.type_of_content} pour mon ${request.support} dont l'objet est "${request.topic} " et qui est destiné aux ${request.target} avec un ton ${request.tone}.`;

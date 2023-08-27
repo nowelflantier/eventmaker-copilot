@@ -45,7 +45,7 @@ const EventPage = () => {
 
   useEffect(() => {
     {
-      !session ? router.push("/") : setCurrentEventId(eventId);
+      // !session ? router.push("/") : setCurrentEventId(eventId);
     }
   }, []);
   useEffect(() => {

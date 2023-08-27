@@ -157,8 +157,8 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
 
           <dl className="mt-6 grid grid-cols-1 card_container gap-8 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
             <h2 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-              <span className="blue_gradient"> Les informations de </span>
-              votre évènement
+              <span className="blue_gradient"> Les informations </span>
+              de votre évènement
             </h2>
 
             {!event?.type_of_event ? (
@@ -194,15 +194,23 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                 </div>
               ))}
             {/* partie générer mon contenu par catégorie */}
-            {event?.type_of_event && (
+            {event?.categories && (
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
-                  <span className="black_gradient">
-                    Les catégories pour lesquelles générer votre contenu
-                  </span>
+                  <span className="red_gradient">
+                    Les catégories</span> pour lesquelles générer vos rétroplannings
                 </h3>
+                <Link
+                  className=" prompt_cta_card text-center"
+                  href={`/event/${event?._id}/retroplanning`}
+                >
+                  <span className=" cta_text p-1 ">
+                    Générer ou consulter les rétroplannings{" "}
+                    <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Link>
                 <div className="card_container">
-                {event?.type_of_event &&
+                {event?.categories &&
                   event?.categories?.filter(stat => stat.selected === true).map((stat) => (
                     <div key={stat.name} className="flex card flex-col-reverse">
                       <dt className="text-base leading-7 text-gray-500">
@@ -220,9 +228,9 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
               <div className="card_container">
                 <h3 className="text-2xl font-bold text-center tracking-tight text-black sm:text-3xl">
                   <span className="orange_gradient">
-                    Les contenus générés pour{" "}
+                    Les contenus générés{" "}
                   </span>
-                  votre évènement
+                  pour votre évènement
                 </h3>
 
                 <Link
@@ -234,7 +242,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                     <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Link>
-                <div className="w-full text-center ">
+                {event?.requests && <div className="w-full text-center ">
                   <button
                     onClick={() => setShowFilters(!showFilters)} // Basculer l'affichage des filtres
                     className="text-gray-400"
@@ -244,7 +252,7 @@ const EventDetailledView = ({ event, isEventLoaded }) => {
                       : "Afficher les filtres"}{" "}
                     <span aria-hidden="true">{showFilters ? "↑" : "↓"}</span>
                   </button>
-                </div>
+                </div>}
                 {showFilters && (
                   <div className="flex flex-wrap md:flex-nowrap w-full">
                     {filterConfigurations.map((filterConfig) => {

@@ -15,7 +15,23 @@ const EventSchema = new Schema({
       id: { type: String },
       name: { type: String },
       population: { type: String },
-      selected: {type: Boolean},
+      selected: { type: Boolean },
+    },
+  ],
+  retroplannings: [
+    {
+      id: { type: String },
+      category_name: { type: String },
+      tone: { type: String},
+      email_amount: { type: Number},
+      emails: [
+        {
+          date: { type: String },
+          subject: { type: String },
+          objectif: { type: String },
+          contenu: { type: String },
+        },
+      ],
     },
   ],
   requests: [
